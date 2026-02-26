@@ -52,22 +52,38 @@ class SigninViewController: UIViewController {
     @IBAction func didTapLoginButton(_ sender: Any) {
         let email = emailTextfield.text ?? ""
         let pass = passwordTextfield.text ?? ""
-        
-        print(email)
-        print(pass)
+
         
 //        guard !email.isEmpty, !pass.isEmpty else {
-//            return
+//           return
 //        }
-//     
+
+
+        
+
+        let productListVC = ProductListViewController()
+        self.navigationController?.pushViewController(productListVC, animated: true)
+        
+        
+        
+        
+        
+        
+        
+//        let vc = TestViewController()
+//        self.navigationController?.pushViewController(vc, animated: true)
+        
+        //productListVC.modalTransitionStyle = .fullscreen
+
+        
         
         // push - pop
         // present - dismiss
-        let productListVC = ProductListViewController()
+  //      let productListVC = ProductListViewController()
         //productListVC.modalTransitionStyle = .fullscreen
         //self.present(productListVC, animated: true)
-                self.navigationController?.pushViewController(
-                    productListVC, animated: true)
+ //               self.navigationController?.pushViewController(
+  //                  productListVC, animated: true)
         
         
         

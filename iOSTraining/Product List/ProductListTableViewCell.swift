@@ -30,9 +30,6 @@ class ProductListTableViewCell: UITableViewCell {
     
     
     
-
-    
-    
     
     var product: Product? {
         didSet {
@@ -156,7 +153,7 @@ class ProductListTableViewCell: UITableViewCell {
                 formattedCount = String(Int(reviewCount))
             }
             
-            // Add rating and review count
+            // add rating and review count
             let ratingText = NSAttributedString(string: " \(String(format: "%.1f", rating)) ◦ \(formattedCount)")
             attributedString.append(ratingText)
             
@@ -164,10 +161,10 @@ class ProductListTableViewCell: UITableViewCell {
         } else {
             let attributedString = NSMutableAttributedString()
             
-            // Add left padding
+            // add left padding
             attributedString.append(NSAttributedString(string: "  "))
             
-            // Add empty star
+            // add empty star
             if let starImage = UIImage(systemName: "star") {
                 let attachment = NSTextAttachment()
                 attachment.image = starImage.withTintColor(.systemGray)

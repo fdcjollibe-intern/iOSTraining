@@ -10,6 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProductListViewController" customModule="iOSTraining" customModuleProvider="target">
             <connections>
+                <outlet property="productSearchBar" destination="6WW-kU-EOc" id="AdP-1y-cVJ"/>
                 <outlet property="tableView" destination="O83-tD-qaE" id="64t-2d-VGZ"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -28,14 +29,28 @@
                     </constraints>
                     <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </tableView>
+                <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" placeholder="Search Something ..." translatesAutoresizingMaskIntoConstraints="NO" id="6WW-kU-EOc">
+                    <rect key="frame" x="0.0" y="100" width="393" height="97"/>
+                    <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <textInputTraits key="textInputTraits"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="Vbu-W8-VWD"/>
+                    </connections>
+                </searchBar>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
-            <color key="backgroundColor" systemColor="systemMintColor"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
+                <constraint firstAttribute="bottom" secondItem="O83-tD-qaE" secondAttribute="bottom" id="69g-8T-KIh"/>
+                <constraint firstItem="O83-tD-qaE" firstAttribute="top" secondItem="6WW-kU-EOc" secondAttribute="bottom" id="7tz-fZ-h1N"/>
                 <constraint firstItem="O83-tD-qaE" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="DiO-fP-5BX"/>
                 <constraint firstItem="O83-tD-qaE" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="NjU-zq-s2O"/>
+                <constraint firstItem="O83-tD-qaE" firstAttribute="top" secondItem="6WW-kU-EOc" secondAttribute="bottom" id="cBH-J5-ush"/>
                 <constraint firstItem="O83-tD-qaE" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="db0-wi-3d5"/>
-                <constraint firstItem="O83-tD-qaE" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="79" id="jiP-H0-ufP"/>
+                <constraint firstItem="6WW-kU-EOc" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="100" id="gCw-kH-s0Y"/>
+                <constraint firstItem="6WW-kU-EOc" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="th5-xI-7yE"/>
+                <constraint firstItem="6WW-kU-EOc" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="wqW-bL-ZGA"/>
             </constraints>
             <point key="canvasLocation" x="67.938931297709928" y="129.57746478873241"/>
         </view>
@@ -43,9 +58,6 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemMintColor">
-            <color red="0.0" green="0.78431372549019607" blue="0.70196078431372544" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

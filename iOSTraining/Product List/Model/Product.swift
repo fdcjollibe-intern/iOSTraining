@@ -19,5 +19,10 @@ struct Product {
     let reviews: Double?
     let inStock: Bool?
     
+    let overview: String?
+    let highlight: [String]?
+    
+    
+    
     
 }
