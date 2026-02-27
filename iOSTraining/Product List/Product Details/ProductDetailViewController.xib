@@ -29,81 +29,89 @@
             <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="scrollableAxes" translatesAutoresizingMaskIntoConstraints="NO" id="9Fn-C9-u2v">
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Fn-C9-u2v">
                     <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RiJ-xH-2tu">
-                            <rect key="frame" x="0.0" y="0.0" width="394" height="874"/>
+                            <rect key="frame" x="0.0" y="0.0" width="402" height="1190.3333333333333"/>
                             <subviews>
-                                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceHorizontal="YES" pagingEnabled="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Sk0-Yi-Al8">
-                                    <rect key="frame" x="0.0" y="61" width="394" height="261"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Sk0-Yi-Al8">
+                                    <rect key="frame" x="0.0" y="0.0" width="402" height="300"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Ysp-RN-nNY">
-                                        <size key="itemSize" width="128" height="128"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="300" id="fJd-yY-2Ih"/>
+                                    </constraints>
+                                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="Ysp-RN-nNY">
+                                        <size key="itemSize" width="402" height="300"/>
                                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                         <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                         <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                     </collectionViewFlowLayout>
                                 </collectionView>
-                                <pageControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="YDY-TW-lY8">
-                                    <rect key="frame" x="161" y="289" width="73" height="26"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" defersCurrentPageDisplay="YES" numberOfPages="20" translatesAutoresizingMaskIntoConstraints="NO" id="YDY-TW-lY8">
+                                    <rect key="frame" x="120.33333333333333" y="270" width="161.33333333333337" height="26"/>
+                                    <color key="pageIndicatorTintColor" systemColor="opaqueSeparatorColor"/>
+                                    <color key="currentPageIndicatorTintColor" red="0.34195005890000002" green="0.68807166809999998" blue="0.52968245739999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </pageControl>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="FEATURED" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vwh-Xs-Lou">
-                                    <rect key="frame" x="24" y="344" width="70" height="16"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="FEATURED" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vwh-Xs-Lou">
+                                    <rect key="frame" x="20" y="320" width="69" height="30"/>
                                     <color key="backgroundColor" red="0.93813163040000003" green="0.98453027010000005" blue="0.96231251959999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                     <color key="textColor" red="0.34195005890000002" green="0.68807166809999998" blue="0.52968245739999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     <nil key="highlightedColor"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                            <integer key="value" value="15"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="CATEGORY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j2e-XB-ccm">
-                                    <rect key="frame" x="138" y="344" width="72" height="16"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="CATEGORY" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j2e-XB-ccm">
+                                    <rect key="frame" x="97" y="320" width="72" height="30"/>
+                                    <color key="backgroundColor" red="0.93813163040000003" green="0.98453027010000005" blue="0.96231251959999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                     <color key="textColor" red="0.34195005890000002" green="0.68807166809999998" blue="0.52968245739999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     <nil key="highlightedColor"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                            <integer key="value" value="15"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Product Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Zk-vs-nZf">
-                                    <rect key="frame" x="15" y="368" width="365" height="39"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product Name" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Zk-vs-nZf">
+                                    <rect key="frame" x="20" y="345.66666666666669" width="362" height="38.333333333333314"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="32"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gTH-FY-hOc">
-                                    <rect key="frame" x="14" y="415" width="366" height="128"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gTH-FY-hOc">
+                                    <rect key="frame" x="20" y="404" width="362" height="125.33333333333337"/>
                                     <string key="text">Powered by the latest Intel Core i7 processor and 16GB of high-speed DDR5 RAM, it handles multitasking, creative workloads, and business applications with ease. Its 14-inch Full HD IPS display delivers sharp visuals and vibrant colors, making it ideal for content creation, streaming, and professional presentations.</string>
                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="₱ 2,320,699.99" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fWJ-tp-tkB">
-                                    <rect key="frame" x="15" y="551" width="249" height="39"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="₱ 2,320,699.99" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fWJ-tp-tkB">
+                                    <rect key="frame" x="20" y="549.33333333333337" width="246" height="38"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="32"/>
                                     <color key="textColor" red="0.34195005890000002" green="0.68807166809999998" blue="0.52968245739999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="4.6 ★ 100.1K " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ref-UA-4av">
-                                    <rect key="frame" x="272" y="551" width="108" height="39"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4.6 ★ 100.1K" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ref-UA-4av">
+                                    <rect key="frame" x="297.33333333333331" y="560.66666666666663" width="84.666666666666686" height="15.666666666666629"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
-                                    <color key="textColor" red="1" green="0.55395987356167353" blue="0.21947763812388865" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="textColor" red="1" green="0.55395987359999999" blue="0.21947763810000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Overview" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tja-Ao-OvI">
-                                    <rect key="frame" x="14" y="612" width="366" height="26"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Overview" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tja-Ao-OvI">
+                                    <rect key="frame" x="20" y="607.33333333333337" width="362" height="25.333333333333371"/>
                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="21"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="50" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ntg-jh-5fq">
-                                    <rect key="frame" x="14" y="646" width="366" height="367"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ntg-jh-5fq">
+                                    <rect key="frame" x="20" y="652.66666666666663" width="362" height="358.33333333333337"/>
                                     <string key="text">The Aurex ProBook X14 is engineered for performance-driven users who demand speed, reliability, and mobility in one sleek device. Powered by the latest Intel Core i7 processor and 16GB of high-speed DDR5 RAM, it handles multitasking, creative workloads, and business applications with ease.
 
 Its 14-inch Full HD IPS display delivers sharp visuals and vibrant colors, making it ideal for content creation, streaming, and professional presentations. The ultra-fast 512GB NVMe SSD ensures quick boot times and seamless file access.
@@ -113,61 +121,100 @@ Encased in a premium aluminum chassis, the ProBook X14 combines durability with 
                                     <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TOP HIGHLIGHTS" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kON-hf-4Rx">
-                                    <rect key="frame" x="14" y="1036" width="366" height="26"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TOP HIGHLIGHTS" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kON-hf-4Rx">
+                                    <rect key="frame" x="20" y="1031" width="362" height="25.333333333333258"/>
                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="21"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="★ 13th Gen Intel Core i7 Performance" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="50" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lrf-63-3Kx">
-                                    <rect key="frame" x="15" y="1070" width="365" height="37"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="★ 13th Gen Intel Core i7 Performance" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lrf-63-3Kx">
+                                    <rect key="frame" x="20" y="1076.3333333333333" width="362" height="18"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="★ 13th Gen Intel Core i7 Performance" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="50" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Mi-l3-Fla">
-                                    <rect key="frame" x="15" y="1115" width="365" height="37"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="★ 512GB NVMe SSD Storage" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Mi-l3-Fla">
+                                    <rect key="frame" x="20" y="1114.3333333333333" width="362" height="18"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="★ 13th Gen Intel Core i7 Performance" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="50" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nqw-4P-t1h">
-                                    <rect key="frame" x="15" y="1160" width="365" height="37"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="★ 14-inch Full HD IPS Display" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nqw-4P-t1h">
+                                    <rect key="frame" x="20" y="1152.3333333333333" width="362" height="18"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstItem="gTH-FY-hOc" firstAttribute="top" secondItem="6Zk-vs-nZf" secondAttribute="bottom" constant="20" id="0Mf-8m-a4H"/>
+                                <constraint firstItem="kON-hf-4Rx" firstAttribute="top" secondItem="ntg-jh-5fq" secondAttribute="bottom" constant="20" id="1Uc-gc-TBc"/>
+                                <constraint firstItem="Tja-Ao-OvI" firstAttribute="leading" secondItem="RiJ-xH-2tu" secondAttribute="leading" constant="20" id="2py-Ak-LdO"/>
+                                <constraint firstItem="ntg-jh-5fq" firstAttribute="top" secondItem="Tja-Ao-OvI" secondAttribute="bottom" constant="20" id="4uD-Cz-yM7"/>
+                                <constraint firstItem="6Zk-vs-nZf" firstAttribute="leading" secondItem="RiJ-xH-2tu" secondAttribute="leading" constant="20" id="5hh-vu-RoG"/>
+                                <constraint firstItem="j2e-XB-ccm" firstAttribute="leading" secondItem="Vwh-Xs-Lou" secondAttribute="trailing" constant="8" id="6M9-dH-VUK"/>
+                                <constraint firstItem="nqw-4P-t1h" firstAttribute="leading" secondItem="RiJ-xH-2tu" secondAttribute="leading" constant="20" id="7Zz-dJ-dBr"/>
+                                <constraint firstItem="5Mi-l3-Fla" firstAttribute="top" secondItem="lrf-63-3Kx" secondAttribute="bottom" constant="20" id="C3R-GR-JiH"/>
+                                <constraint firstItem="Tja-Ao-OvI" firstAttribute="top" secondItem="fWJ-tp-tkB" secondAttribute="bottom" constant="20" id="CLv-TZ-HOS"/>
+                                <constraint firstItem="YDY-TW-lY8" firstAttribute="centerX" secondItem="RiJ-xH-2tu" secondAttribute="centerX" id="DAs-h5-01x"/>
+                                <constraint firstAttribute="trailing" secondItem="gTH-FY-hOc" secondAttribute="trailing" constant="20" id="DkR-Ag-8gU"/>
+                                <constraint firstItem="nqw-4P-t1h" firstAttribute="top" secondItem="5Mi-l3-Fla" secondAttribute="bottom" constant="20" id="E6f-Ca-xb0"/>
+                                <constraint firstAttribute="trailing" secondItem="kON-hf-4Rx" secondAttribute="trailing" constant="20" id="E7e-F8-aam"/>
+                                <constraint firstAttribute="trailing" secondItem="fWJ-tp-tkB" secondAttribute="trailing" constant="136" id="F03-3e-5Vt"/>
+                                <constraint firstItem="Vwh-Xs-Lou" firstAttribute="leading" secondItem="RiJ-xH-2tu" secondAttribute="leading" constant="20" id="F4w-KF-ykR"/>
+                                <constraint firstItem="j2e-XB-ccm" firstAttribute="centerY" secondItem="Vwh-Xs-Lou" secondAttribute="centerY" constant="20" id="GkF-1N-JO1"/>
+                                <constraint firstItem="6Zk-vs-nZf" firstAttribute="top" secondItem="Vwh-Xs-Lou" secondAttribute="bottom" constant="10" id="KkG-VK-rf1"/>
+                                <constraint firstAttribute="trailing" secondItem="nqw-4P-t1h" secondAttribute="trailing" constant="20" id="L06-xG-xIN"/>
+                                <constraint firstItem="lrf-63-3Kx" firstAttribute="top" secondItem="kON-hf-4Rx" secondAttribute="bottom" constant="20" id="L8p-g6-L9I"/>
+                                <constraint firstAttribute="trailing" secondItem="Ref-UA-4av" secondAttribute="trailing" constant="20" id="LP7-dR-0cH"/>
+                                <constraint firstItem="YDY-TW-lY8" firstAttribute="top" secondItem="Sk0-Yi-Al8" secondAttribute="bottom" constant="-30" id="M7B-Hv-1Rg"/>
+                                <constraint firstItem="Sk0-Yi-Al8" firstAttribute="leading" secondItem="RiJ-xH-2tu" secondAttribute="leading" id="T7k-6U-4pU"/>
+                                <constraint firstItem="fWJ-tp-tkB" firstAttribute="top" secondItem="gTH-FY-hOc" secondAttribute="bottom" constant="20" id="U34-3z-bMT"/>
+                                <constraint firstItem="Ref-UA-4av" firstAttribute="centerY" secondItem="fWJ-tp-tkB" secondAttribute="centerY" id="VUZ-fu-aTg"/>
+                                <constraint firstItem="fWJ-tp-tkB" firstAttribute="leading" secondItem="RiJ-xH-2tu" secondAttribute="leading" constant="20" id="XhN-mZ-wrh"/>
+                                <constraint firstAttribute="trailing" secondItem="5Mi-l3-Fla" secondAttribute="trailing" constant="20" id="YfF-uU-aVw"/>
+                                <constraint firstItem="gTH-FY-hOc" firstAttribute="leading" secondItem="RiJ-xH-2tu" secondAttribute="leading" constant="20" id="aEk-B0-C1l"/>
+                                <constraint firstItem="kON-hf-4Rx" firstAttribute="leading" secondItem="RiJ-xH-2tu" secondAttribute="leading" constant="20" id="bNy-b9-PEJ"/>
+                                <constraint firstItem="5Mi-l3-Fla" firstAttribute="leading" secondItem="RiJ-xH-2tu" secondAttribute="leading" constant="20" id="cRb-P0-tRw"/>
+                                <constraint firstAttribute="bottom" secondItem="nqw-4P-t1h" secondAttribute="bottom" constant="20" id="d3f-F1-dh5"/>
+                                <constraint firstItem="ntg-jh-5fq" firstAttribute="leading" secondItem="RiJ-xH-2tu" secondAttribute="leading" constant="20" id="dYz-3q-McM"/>
+                                <constraint firstAttribute="trailing" secondItem="ntg-jh-5fq" secondAttribute="trailing" constant="20" id="fKZ-tg-yfP"/>
+                                <constraint firstItem="Vwh-Xs-Lou" firstAttribute="top" secondItem="Sk0-Yi-Al8" secondAttribute="bottom" constant="20" id="g1S-dI-nuK"/>
+                                <constraint firstAttribute="trailing" secondItem="6Zk-vs-nZf" secondAttribute="trailing" constant="20" id="nQ2-ON-Hze"/>
+                                <constraint firstItem="lrf-63-3Kx" firstAttribute="leading" secondItem="RiJ-xH-2tu" secondAttribute="leading" constant="20" id="nmg-KY-oEr"/>
+                                <constraint firstAttribute="trailing" secondItem="Sk0-Yi-Al8" secondAttribute="trailing" id="o7h-cE-WpF"/>
+                                <constraint firstItem="Sk0-Yi-Al8" firstAttribute="top" secondItem="RiJ-xH-2tu" secondAttribute="top" id="obf-vf-hwQ"/>
+                                <constraint firstAttribute="trailing" secondItem="Tja-Ao-OvI" secondAttribute="trailing" constant="20" id="tMk-vD-VkS"/>
+                                <constraint firstAttribute="trailing" secondItem="lrf-63-3Kx" secondAttribute="trailing" constant="20" id="zW7-W9-CZ2"/>
+                            </constraints>
                         </view>
                     </subviews>
                     <constraints>
-                        <constraint firstItem="RiJ-xH-2tu" firstAttribute="leading" secondItem="9Fn-C9-u2v" secondAttribute="leading" id="BfN-2Q-x0m"/>
-                        <constraint firstAttribute="trailing" secondItem="RiJ-xH-2tu" secondAttribute="trailing" id="fAQ-l2-YZ7"/>
-                        <constraint firstAttribute="bottom" secondItem="RiJ-xH-2tu" secondAttribute="bottom" id="jhU-Fq-LG4"/>
-                        <constraint firstItem="RiJ-xH-2tu" firstAttribute="top" secondItem="9Fn-C9-u2v" secondAttribute="top" id="tsb-7a-Jqf"/>
+                        <constraint firstAttribute="trailing" secondItem="RiJ-xH-2tu" secondAttribute="trailing" id="5ib-0C-3K2"/>
+                        <constraint firstItem="RiJ-xH-2tu" firstAttribute="leading" secondItem="9Fn-C9-u2v" secondAttribute="leading" id="MhE-kh-WUc"/>
+                        <constraint firstItem="RiJ-xH-2tu" firstAttribute="top" secondItem="9Fn-C9-u2v" secondAttribute="top" id="YjL-dx-F0z"/>
+                        <constraint firstAttribute="bottom" secondItem="RiJ-xH-2tu" secondAttribute="bottom" id="ss6-44-xB1"/>
+                        <constraint firstItem="RiJ-xH-2tu" firstAttribute="width" secondItem="9Fn-C9-u2v" secondAttribute="width" id="wdY-If-87M"/>
                     </constraints>
                 </scrollView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vec-yo-mN8"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="9Fn-C9-u2v" secondAttribute="bottom" id="7h8-Sa-HAe"/>
-                <constraint firstItem="RiJ-xH-2tu" firstAttribute="height" secondItem="tHN-be-bvg" secondAttribute="height" id="8RP-uc-kkG"/>
-                <constraint firstItem="9Fn-C9-u2v" firstAttribute="top" secondItem="tHN-be-bvg" secondAttribute="top" id="Axo-Np-CEU"/>
-                <constraint firstItem="RiJ-xH-2tu" firstAttribute="width" secondItem="tHN-be-bvg" secondAttribute="width" multiplier="0.9801" id="Lpu-tp-ZRb"/>
-                <constraint firstItem="9Fn-C9-u2v" firstAttribute="leading" secondItem="vec-yo-mN8" secondAttribute="leading" id="d91-yI-jvp"/>
-                <constraint firstItem="9Fn-C9-u2v" firstAttribute="trailing" secondItem="vec-yo-mN8" secondAttribute="trailing" id="lkc-Bd-ns9"/>
+                <constraint firstItem="9Fn-C9-u2v" firstAttribute="leading" secondItem="vec-yo-mN8" secondAttribute="leading" id="86y-VU-a6v"/>
+                <constraint firstItem="9Fn-C9-u2v" firstAttribute="top" secondItem="tHN-be-bvg" secondAttribute="top" id="C6I-lj-hbt"/>
+                <constraint firstAttribute="bottom" secondItem="9Fn-C9-u2v" secondAttribute="bottom" id="KNe-Nq-niF"/>
+                <constraint firstItem="9Fn-C9-u2v" firstAttribute="trailing" secondItem="vec-yo-mN8" secondAttribute="trailing" id="bNk-Q0-rMZ"/>
             </constraints>
-            <point key="canvasLocation" x="-2255.2238805970146" y="-2168.9931350114416"/>
+            <point key="canvasLocation" x="-2255.2238805970146" y="-2169.3363844393589"/>
         </view>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
     </objects>
     <resources>
+        <systemColor name="opaqueSeparatorColor">
+            <color red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

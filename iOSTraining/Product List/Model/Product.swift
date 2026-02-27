@@ -8,21 +8,30 @@
 import Foundation
 
 
-struct Product {
-    let image: [String]?
-    let name: String
+struct Review: Decodable {
+    let rating: Int
+    let comment: String
+    let date: String
+    let reviewerName: String
+    let reviewerEmail: String
+}
+
+struct Product: Decodable {
+    let id: Int
+    let images: [String]?
+    let title: String
     let rating: Double?
     let description: String
     let price: Double
     let category: String?
-    let isFeatured: Bool?
-    let reviews: Double?
-    let inStock: Bool?
-    
-    let overview: String?
-    let highlight: [String]?
-    
-    
-    
-    
+    let discountPercentage: Double?
+    let reviews: [Review]?
+    let availabilityStatus: String?
+    let thumbnail: String?
 }
+
+struct ProductsResponse: Decodable {
+    let products: [Product]
+}
+
+

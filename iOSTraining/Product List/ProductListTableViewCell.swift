@@ -29,158 +29,122 @@ class ProductListTableViewCell: UITableViewCell {
     @IBOutlet weak var productContentView: UIView!
     
     
-    
-    
-    var product: Product? {
-        didSet {
-            displayData()
-        }
-    }
+    private var currentImageURL: String?
 
-    
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        self.accessoryType = .disclosureIndicator
-            
-            // Remove default cell background
+        var product: Product? {
+            didSet {
+                displayData()
+            }
+        }
+
+        override func awakeFromNib() {
+            super.awakeFromNib()
+            self.accessoryType = .disclosureIndicator
             self.backgroundColor = .clear
             self.selectionStyle = .none
-            
-            // Setup corner radius for labels
+
             productIsFeatured.layer.cornerRadius = 10
             productIsFeatured.clipsToBounds = true
-            
+
             productCategory.layer.cornerRadius = 10
             productCategory.clipsToBounds = true
-            
+
             productReviewsLabel.layer.cornerRadius = 10
             productReviewsLabel.clipsToBounds = true
-            
+
             productIsInStock.layer.cornerRadius = 10
             productIsInStock.clipsToBounds = true
-            
-        
-    }
-    
-    
-    
-    
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-    
-    private func displayData() {
-        
-        
-        productNameLabel.text = product?.name
-        
-        // Format price with thousand separators and 2 decimals
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
-        formatter.groupingSeparator = ","
-        if let price = product?.price {
-            productPriceLabel.text = "₱ \(formatter.string(from: NSNumber(value: price)) ?? "0.00")"
         }
-        
-        productDescription.text = product?.description
-        productCategory.text = product?.category
-        
-        // Display stock status with padding
-        if let inStock = product?.inStock {
-            if inStock {
-                productIsInStock.text = "  In Stock"
+
+        override func prepareForReuse() {
+            super.prepareForReuse()
+            productImageView.image = nil
+            currentImageURL = nil
+        }
+
+        override func setSelected(_ selected: Bool, animated: Bool) {
+            super.setSelected(selected, animated: animated)
+        }
+
+        private func displayData() {
+            guard let product = product else { return }
+
+            productNameLabel.text = product.title
+
+            // Format price
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+            formatter.minimumFractionDigits = 2
+            formatter.maximumFractionDigits = 2
+            formatter.groupingSeparator = ","
+            productPriceLabel.text = "₱ \(formatter.string(from: NSNumber(value: product.price)) ?? "0.00")"
+
+            productDescription.text = product.description
+            productCategory.text = product.category?.uppercased()
+
+            // Availability status
+            let status = product.availabilityStatus ?? "Unknown"
+            productIsInStock.text = "  \(status.uppercased())"
+            if status.lowercased().contains("in stock") {
                 productIsInStock.textColor = .label
-            } else {
-                productIsInStock.text = "  Out of Stock"
+            } else if status.lowercased().contains("out") {
                 productIsInStock.textColor = .systemPink
+            } else {
+                productIsInStock.textColor = .systemGray
             }
-        } else {
-            productIsInStock.text = "  Stock Unknown"
-            productIsInStock.textColor = .systemGray
-        }
-        
-        // Display featured status
-        if let isFeatured = product?.isFeatured, isFeatured {
-            productIsFeatured.text = "FEATURED"
-            productIsFeatured.isHidden = false
-        } else {
-            productIsFeatured.isHidden = true
-            productIsFeatured.backgroundColor = .clear
-        }
-        
-        // Load product image
-        if let imageName = product?.image?.first {
-            productImageView.image = UIImage(named: imageName)
-            productImageView.contentMode = .scaleAspectFit
-        } else {
-            productImageView.image = UIImage(systemName: "photo")
-            productImageView.contentMode = .scaleAspectFit
-        }
-        
-        // Display rating with single green star
-        if let rating = product?.rating, let reviewCount = product?.reviews {
+
+            // Discount as "featured" badge
+            if let discount = product.discountPercentage, discount >= 10.0 {
+                productIsFeatured.text = "\(String(format: "%.0f", discount))% OFF".uppercased()
+                productIsFeatured.isHidden = false
+            } else {
+                productIsFeatured.isHidden = true
+                productIsFeatured.backgroundColor = .clear
+            }
+
+            // Load thumbnail image from URL
+            let thumbnailURL = product.thumbnail ?? product.images?.first
+            if let urlString = thumbnailURL, let url = URL(string: urlString) {
+                currentImageURL = urlString
+                URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+                    guard let self = self,
+                          let data = data,
+                          let image = UIImage(data: data),
+                          self.currentImageURL == urlString else { return }
+                    DispatchQueue.main.async {
+                        self.productImageView.image = image
+                        self.productImageView.contentMode = .scaleAspectFit
+                    }
+                }.resume()
+            } else {
+                productImageView.image = UIImage(systemName: "photo")
+                productImageView.contentMode = .scaleAspectFit
+            }
+
+            // Rating and review count
+            let rating = product.rating ?? 0.0
+            let reviewCount = product.reviews?.count ?? 0
+
             let attributedString = NSMutableAttributedString()
-            
-            // Add left padding
             attributedString.append(NSAttributedString(string: "  "))
-            
-            // Add green star icon
-            let starImage = UIImage(systemName: rating > 0 ? "star.fill" : "star")
-            if let image = starImage {
+
+            let starImageName = rating > 0 ? "star.fill" : "star"
+            if let starImage = UIImage(systemName: starImageName) {
                 let attachment = NSTextAttachment()
-                // Use custom green color #21B485
                 let greenColor = UIColor(red: 0x21/255.0, green: 0xB4/255.0, blue: 0x85/255.0, alpha: 1.0)
-                attachment.image = image.withTintColor(greenColor)
-                
+                attachment.image = starImage.withTintColor(rating > 0 ? greenColor : .systemGray)
                 let font = productReviewsLabel.font ?? UIFont.systemFont(ofSize: 17)
                 attachment.bounds = CGRect(x: 0, y: font.capHeight / 2 - 8, width: 16, height: 16)
-                
                 attributedString.append(NSAttributedString(attachment: attachment))
             }
-            
-            // Format review count
-            let formattedCount: String
-            if reviewCount >= 1000 {
-                let thousands = reviewCount / 1000
-                formattedCount = String(format: "%.1fK", thousands)
+
+            if reviewCount > 0 {
+                let formattedCount = reviewCount >= 1000 ? String(format: "%.1fK", Double(reviewCount) / 1000) : "\(reviewCount)"
+                attributedString.append(NSAttributedString(string: " \(String(format: "%.1f", rating)) ◦ \(formattedCount)".uppercased()))
             } else {
-                formattedCount = String(Int(reviewCount))
+                attributedString.append(NSAttributedString(string: " NO REVIEWS"))
             }
-            
-            // add rating and review count
-            let ratingText = NSAttributedString(string: " \(String(format: "%.1f", rating)) ◦ \(formattedCount)")
-            attributedString.append(ratingText)
-            
+
             productReviewsLabel.attributedText = attributedString
-        } else {
-            let attributedString = NSMutableAttributedString()
-            
-            // add left padding
-            attributedString.append(NSAttributedString(string: "  "))
-            
-            // add empty star
-            if let starImage = UIImage(systemName: "star") {
-                let attachment = NSTextAttachment()
-                attachment.image = starImage.withTintColor(.systemGray)
-                
-                let font = productReviewsLabel.font ?? UIFont.systemFont(ofSize: 17)
-                attachment.bounds = CGRect(x: 0, y: font.capHeight / 2 - 8, width: 14, height: 14)
-                
-                attributedString.append(NSAttributedString(attachment: attachment))
-            }
-            
-            let noRatingText = NSAttributedString(string: " No Reviews")
-            attributedString.append(noRatingText)
-            
-            productReviewsLabel.attributedText = attributedString
-            
         }
     }
-}
-    
