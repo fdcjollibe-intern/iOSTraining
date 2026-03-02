@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="TestCollectionViewCell" id="gTV-IL-0wX" customClass="TestCollectionViewCell" customModule="iOSTraining" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="394" height="286"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="394" height="286"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="spotify" translatesAutoresizingMaskIntoConstraints="NO" id="wcc-ke-HY7">
+                        <rect key="frame" x="0.0" y="0.0" width="394" height="286"/>
+                    </imageView>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="wcc-ke-HY7" secondAttribute="trailing" id="BXY-HH-Eaz"/>
+                <constraint firstItem="wcc-ke-HY7" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="DGK-xN-2h0"/>
+                <constraint firstItem="wcc-ke-HY7" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="Ke2-zu-blY"/>
+                <constraint firstAttribute="bottom" secondItem="wcc-ke-HY7" secondAttribute="bottom" id="XZT-FD-5dG"/>
+            </constraints>
+            <size key="customSize" width="394" height="286"/>
+            <connections>
+                <outlet property="photoImageView" destination="wcc-ke-HY7" id="VEG-oY-Ai3"/>
+            </connections>
+            <point key="canvasLocation" x="287.02290076335879" y="230.98591549295776"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="spotify" width="225" height="225"/>
+    </resources>
+</document>
