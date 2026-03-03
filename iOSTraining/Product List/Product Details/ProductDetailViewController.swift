@@ -15,13 +15,12 @@ class ProductDetailViewController: UIViewController {
     @IBOutlet weak var productDescriptionLabel: UILabel!
     @IBOutlet weak var productPriceLabel: UILabel!
     @IBOutlet weak var productRatingReviewLabel: UILabel!
-    @IBOutlet weak var productOverviewLabel: UILabel!
-    @IBOutlet weak var productTopHiglhightLabel1: UILabel!
-    @IBOutlet weak var productTopHiglhightLabel2: UILabel!
-    @IBOutlet weak var productTopHiglhightLabel3: UILabel!
     @IBOutlet weak var productImageCollectionView: UICollectionView!
     
     @IBOutlet weak var pageControl: UIPageControl!
+    @IBOutlet weak var addToWishlistButton: UIButton!
+    @IBOutlet weak var addToCartButton: UIButton!
+    @IBOutlet weak var buyNowButton: UIButton!
     
     
     var product: Product?
@@ -54,9 +53,11 @@ class ProductDetailViewController: UIViewController {
 
            isFeaturedLabel.layer.cornerRadius = 10
            isFeaturedLabel.clipsToBounds = true
+           isFeaturedLabel.text = isFeaturedLabel.text?.uppercased()
 
            productCategoryLabel.layer.cornerRadius = 10
            productCategoryLabel.clipsToBounds = true
+           productCategoryLabel.text = productCategoryLabel.text?.uppercased()
 
            productRatingReviewLabel.layer.cornerRadius = 10
            productRatingReviewLabel.clipsToBounds = true
@@ -65,18 +66,6 @@ class ProductDetailViewController: UIViewController {
            productNameLabel.text = product.title
            productDescriptionLabel.text = product.description
            productCategoryLabel.text = product.category
-
-           // Overview: use description as overview since API doesn't have separate overview
-           productOverviewLabel.text = product.description
-
-           // Highlights: use category, availability, discount info
-           productTopHiglhightLabel1.text = product.category != nil ? "• Category: \(product.category!)" : ""
-           productTopHiglhightLabel2.text = product.availabilityStatus != nil ? "• \(product.availabilityStatus!)" : ""
-           if let discount = product.discountPercentage {
-               productTopHiglhightLabel3.text = "• \(String(format: "%.1f", discount))% Discount"
-           } else {
-               productTopHiglhightLabel3.text = ""
-           }
 
            let formatter = NumberFormatter()
            formatter.numberStyle = .decimal
@@ -122,6 +111,62 @@ class ProductDetailViewController: UIViewController {
                pageControl.currentPage = currentPage - 1
            }
        }
+    
+    // MARK: - Button Actions
+    
+    @IBAction func addToWishlistTapped(_ sender: UIButton) {
+        guard let product = product else { return }
+        
+        // Add to wishlist manager
+        WishlistManager.shared.add(product: product)
+        
+        // Show success feedback
+        let alert = UIAlertController(
+            title: "Added to Wishlist",
+            message: "\(product.title) has been added to your wishlist.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+    
+    @IBAction func addToCartTapped(_ sender: UIButton) {
+        guard let product = product else { return }
+        
+        // Add to cart manager
+        CartManager.shared.add(product: product)
+        
+        // Show success feedback with animation
+        let alert = UIAlertController(
+            title: "Added to Cart",
+            message: "\(product.title) has been added to your cart.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+    
+    @IBAction func buyNowTapped(_ sender: UIButton) {
+        guard let product = product else { return }
+        
+        // Add to cart first
+        CartManager.shared.add(product: product)
+        
+        // Navigate directly to checkout
+        navigateToCheckout()
+    }
+    
+    private func navigateToCheckout() {
+        // Navigate to checkout screen
+        // Since we're in a UIKit ViewController, we need to navigate to the SwiftUI Checkout view
+        if let tabBarController = self.tabBarController {
+            // Switch to Cart tab (index 2)
+            tabBarController.selectedIndex = 2
+            
+            // Post notification to show checkout screen
+            NotificationCenter.default.post(name: NSNotification.Name("ShowCheckoutScreen"), object: nil)
+        }
+    }
    }
 
    extension ProductDetailViewController: UICollectionViewDataSource, UICollectionViewDelegate {

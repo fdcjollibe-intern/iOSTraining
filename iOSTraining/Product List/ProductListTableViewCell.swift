@@ -28,6 +28,10 @@ class ProductListTableViewCell: UITableViewCell {
     
     @IBOutlet weak var productContentView: UIView!
     
+    @IBOutlet weak var chip_feat_wrap: UIView!
+    
+    @IBOutlet weak var chip_cat_wrap: UIView!
+    
     
     private var currentImageURL: String?
 
@@ -51,9 +55,10 @@ class ProductListTableViewCell: UITableViewCell {
 
             productReviewsLabel.layer.cornerRadius = 10
             productReviewsLabel.clipsToBounds = true
-
+            
             productIsInStock.layer.cornerRadius = 10
             productIsInStock.clipsToBounds = true
+           
         }
 
         override func prepareForReuse() {
@@ -80,26 +85,41 @@ class ProductListTableViewCell: UITableViewCell {
             productPriceLabel.text = "₱ \(formatter.string(from: NSNumber(value: product.price)) ?? "0.00")"
 
             productDescription.text = product.description
-            productCategory.text = product.category?.uppercased()
-
-            // Availability status
-            let status = product.availabilityStatus ?? "Unknown"
-            productIsInStock.text = "  \(status.uppercased())"
-            if status.lowercased().contains("in stock") {
-                productIsInStock.textColor = .label
-            } else if status.lowercased().contains("out") {
-                productIsInStock.textColor = .systemPink
+            
+            // Category chip - hide if empty
+            if let category = product.category, !category.isEmpty {
+                productCategory.text = category.uppercased()
+                chip_cat_wrap.isHidden = false
             } else {
-                productIsInStock.textColor = .systemGray
+                productCategory.text = ""
+                chip_cat_wrap.isHidden = true
             }
 
-            // Discount as "featured" badge
+            // Availability status - hide if empty
+            if let status = product.availabilityStatus, !status.isEmpty {
+                productIsInStock.text = "• \(status.uppercased())"
+                if status.lowercased().contains("in stock") {
+                    productIsInStock.textColor = UIColor(red: 0x21/255.0, green: 0xB4/255.0, blue: 0x85/255.0, alpha: 1.0)
+                } else if status.lowercased().contains("out") {
+                    productIsInStock.textColor = .systemPink
+                } else {
+                    productIsInStock.textColor = .systemGray
+                }
+                productIsInStock.isHidden = false
+            } else {
+                productIsInStock.text = ""
+                productIsInStock.isHidden = true
+            }
+
+            // Discount as "featured" badge - hide if empty or less than 10%
             if let discount = product.discountPercentage, discount >= 10.0 {
                 productIsFeatured.text = "\(String(format: "%.0f", discount))% OFF".uppercased()
                 productIsFeatured.isHidden = false
+                chip_feat_wrap.isHidden = false
             } else {
+                productIsFeatured.text = ""
                 productIsFeatured.isHidden = true
-                productIsFeatured.backgroundColor = .clear
+                chip_feat_wrap.isHidden = true
             }
 
             // Load thumbnail image from URL
@@ -146,5 +166,6 @@ class ProductListTableViewCell: UITableViewCell {
             }
 
             productReviewsLabel.attributedText = attributedString
+            productReviewsLabel.isHidden = reviewCount == 0
         }
     }

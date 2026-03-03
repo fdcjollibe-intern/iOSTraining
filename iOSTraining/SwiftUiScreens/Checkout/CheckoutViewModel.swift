@@ -83,9 +83,25 @@ class CheckoutViewModel: ObservableObject {
     }
 
     func placeOrder() {
-        CartManager.shared.items
-            .filter { item in checkoutItems.contains(where: { $0.id == item.id }) }
-            .forEach { CartManager.shared.remove(item: $0) }
+        // Save order to OrderManager
+        OrderManager.shared.placeOrder(
+            items: checkoutItems,
+            address: address,
+            courier: selectedCourier,
+            courierFee: shippingFee,
+            paymentMethod: selectedPayment,
+            subtotal: subtotal,
+            total: total
+        )
+        
+        // Remove ordered items from cart
+        checkoutItems.forEach { item in
+            if let cartItem = CartManager.shared.items.first(where: { $0.id == item.id }) {
+                CartManager.shared.remove(item: cartItem)
+            }
+        }
+        
+        // Clear draft
         clearDraft()
         showOrderSuccess = true
     }

@@ -13,11 +13,26 @@ struct Cart: View {
     @State private var selectedIDs: Set<Int> = []
     @State private var selectedItem: CartItem? = nil
     @State private var navigateToCheckout = false
+    @State private var itemToDelete: CartItem? = nil
+    @State private var showSwipeDeleteConfirmation = false
+    @State private var showWishlist = false
 
     var selectedTotal: Double {
         viewModel.items
             .filter { selectedIDs.contains($0.id) }
             .reduce(0) { $0 + $1.total }
+    }
+    
+    var allSelected: Bool {
+        !viewModel.items.isEmpty && selectedIDs.count == viewModel.items.count
+    }
+    
+    func toggleSelectAll() {
+        if allSelected {
+            selectedIDs.removeAll()
+        } else {
+            selectedIDs = Set(viewModel.items.map { $0.id })
+        }
     }
 
     var body: some View {
@@ -31,13 +46,42 @@ struct Cart: View {
             }
             .navigationTitle("My Cart")
             .navigationBarTitleDisplayMode(.inline)
+            .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ShowCheckoutScreen"))) { _ in
+                // Select all items and navigate to checkout
+                if !viewModel.items.isEmpty {
+                    selectedIDs = Set(viewModel.items.map { $0.id })
+                    navigateToCheckout = true
+                }
+            }
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    if !selectedIDs.isEmpty {
+                        Button(action: toggleSelectAll) {
+                            ZStack {
+                                Circle()
+                                    .strokeBorder(allSelected ? Color.brandGreen : Color.gray.opacity(0.35), lineWidth: 1.5)
+                                    .frame(width: 24, height: 24)
+                                if allSelected {
+                                    Circle()
+                                        .fill(Color.brandGreen)
+                                        .frame(width: 24, height: 24)
+                                    Image(systemName: "checkmark")
+                                        .font(.system(size: 11, weight: .bold))
+                                        .foregroundColor(.white)
+                                }
+                            }
+                        }
+                        .buttonStyle(.plain)
+                        .transition(.opacity)
+                    }
+                }
+                
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        // wishlist action placeholder
+                        showWishlist = true
                     } label: {
                         Image(systemName: "heart")
-                            .foregroundColor(.primary)
+                            .foregroundColor(.red)
                     }
                 }
             }
@@ -58,11 +102,32 @@ struct Cart: View {
                     },
                     onDismiss: { selectedItem = nil }
                 )
-                .presentationDetents([.medium])
+                .presentationDetents([.large, .medium])
                 .presentationDragIndicator(.visible)
+            }
+            .sheet(isPresented: $showWishlist) {
+                WishlistView()
             }
             .navigationDestination(isPresented: $navigateToCheckout) {
                 CheckoutView(items: viewModel.items.filter { selectedIDs.contains($0.id) })
+            }
+            .alert("Remove Item", isPresented: $showSwipeDeleteConfirmation) {
+                Button("Remove", role: .destructive) {
+                    if let item = itemToDelete {
+                        selectedIDs.remove(item.id)
+                        viewModel.remove(item)
+                        itemToDelete = nil
+                    }
+                }
+                Button("Cancel", role: .cancel) {
+                    itemToDelete = nil
+                }
+            } message: {
+                if let item = itemToDelete {
+                    Text("Are you sure you want to remove \"\(item.title)\" from your cart?")
+                } else {
+                    Text("Are you sure you want to remove this item from your cart?")
+                }
             }
         }
     }
@@ -108,10 +173,10 @@ struct Cart: View {
                     .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color(UIColor.systemGroupedBackground))
-                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         Button(role: .destructive) {
-                            selectedIDs.remove(item.id)
-                            viewModel.remove(item)
+                            itemToDelete = item
+                            showSwipeDeleteConfirmation = true
                         } label: {
                             VStack(spacing: 4) {
                                 Image(systemName: "trash.fill")
@@ -164,7 +229,7 @@ struct Cart: View {
                         .foregroundColor(.white)
                         .padding(.horizontal, 24)
                         .padding(.vertical, 14)
-                        .background(selectedIDs.isEmpty ? Color.gray.opacity(0.4) : Color.accentColor)
+                        .background(selectedIDs.isEmpty ? Color.gray.opacity(0.4) : Color.brandGreen)
                         .clipShape(Capsule())
                 }
                 .disabled(selectedIDs.isEmpty)
@@ -176,6 +241,7 @@ struct Cart: View {
         }
     }
 }
+
 
 
 

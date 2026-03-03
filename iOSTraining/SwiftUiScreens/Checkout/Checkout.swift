@@ -31,6 +31,8 @@ struct CheckoutView: View {
 
     @State private var showDraftAlert = false
     @State private var navigateToSuccess = false
+    @State private var showCourierModal = false
+    @State private var showPaymentModal = false
 
     private let couriers: [Courier] = [
         Courier(name: "SAP Express",  eta: "Arrive in 5–6 days", icon: "shippingbox",       fee: 150),
@@ -44,6 +46,7 @@ struct CheckoutView: View {
         PaymentMethod(name: "PayPal",      icon: "p.circle.fill",    color: .blue),
         PaymentMethod(name: "Google Pay",  icon: "g.circle.fill",    color: .red),
         PaymentMethod(name: "Apple Pay",   icon: "apple.logo",       color: .primary),
+        PaymentMethod(name: "Cash On Delivery", icon: "banknote", color: .green),
     ]
 
     init(items: [CartItem]) {
@@ -86,6 +89,22 @@ struct CheckoutView: View {
             }
             .sheet(isPresented: $viewModel.showAddressForm) {
                 AddressFormView(address: $viewModel.address)
+            }
+            .sheet(isPresented: $showCourierModal) {
+                CourierSelectionModal(
+                    couriers: couriers,
+                    selectedCourier: $viewModel.selectedCourier,
+                    onDismiss: { showCourierModal = false }
+                )
+                .presentationDetents([.medium, .large])
+            }
+            .sheet(isPresented: $showPaymentModal) {
+                PaymentSelectionModal(
+                    payments: payments,
+                    selectedPayment: $viewModel.selectedPayment,
+                    onDismiss: { showPaymentModal = false }
+                )
+                .presentationDetents([.medium])
             }
             .navigationDestination(isPresented: $navigateToSuccess) {
                 OrderSuccessView {
@@ -243,74 +262,48 @@ struct CheckoutView: View {
         VStack(alignment: .leading, spacing: 12) {
             sectionHeader(number: "2", title: "Select Shipping Courier")
 
-            VStack(spacing: 0) {
-                ForEach(Array(couriers.enumerated()), id: \.element.id) { index, courier in
-                    VStack(alignment: .leading, spacing: 0) {
-                        HStack(spacing: 14) {
-                            ZStack {
-                                Circle()
-                                    .fill(Color(UIColor.secondarySystemBackground))
-                                    .frame(width: 48, height: 48)
-                                Image(systemName: courier.icon)
-                                    .font(.system(size: 20))
-                                    .foregroundColor(.brandGreen)
-                            }
-                            .padding(.leading, 16)
-
-                            VStack(alignment: .leading, spacing: 3) {
-                                Text(courier.name)
-                                    .font(.subheadline)
-                                    .fontWeight(.semibold)
-                                Text(courier.eta)
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-
-                            Spacer()
-
-                            Text("₱\(Int(courier.fee))")
+            HStack(spacing: 12) {
+                Image(systemName: "shippingbox")
+                    .font(.system(size: 20))
+                    .foregroundColor(.brandGreen)
+                    .frame(width: 48, height: 48)
+                    .background(Color(UIColor.secondarySystemBackground))
+                    .clipShape(Circle())
+                    .padding(.leading, 16)
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(viewModel.selectedCourier.isEmpty ? "Select Courier" : viewModel.selectedCourier)
+                        .font(.subheadline)
+                        .fontWeight(viewModel.selectedCourier.isEmpty ? .regular : .semibold)
+                        .foregroundColor(viewModel.selectedCourier.isEmpty ? .secondary : .primary)
+                    
+                    if !viewModel.selectedCourier.isEmpty {
+                        if let courier = couriers.first(where: { $0.name == viewModel.selectedCourier }) {
+                            Text(courier.eta)
                                 .font(.caption)
                                 .foregroundColor(.secondary)
-                                .padding(.trailing, 8)
-
-                            ZStack {
-                                Circle()
-                                    .strokeBorder(
-                                        viewModel.selectedCourier == courier.name ? Color.brandGreen : Color.gray.opacity(0.35),
-                                        lineWidth: 1.5
-                                    )
-                                    .frame(width: 22, height: 22)
-                                if viewModel.selectedCourier == courier.name {
-                                    Circle()
-                                        .fill(Color.brandGreen)
-                                        .frame(width: 12, height: 12)
-                                }
-                            }
-                            .padding(.trailing, 16)
                         }
-                        .padding(.vertical, 16)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            withAnimation(.easeInOut(duration: 0.15)) {
-                                viewModel.selectedCourier = courier.name
-                            }
-                        }
-
-                        Text("Estimated date of receipt depends on store packaging time and delivery time. The goods are sent according to the courier's schedule.")
+                    } else {
+                        Text("Tap to choose shipping method")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                            .padding(.horizontal, 16)
-                            .padding(.bottom, 14)
-                    }
-
-                    if index < couriers.count - 1 {
-                        Divider().padding(.leading, 16)
                     }
                 }
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 14))
+                    .foregroundColor(.secondary)
+                    .padding(.trailing, 16)
             }
+            .padding(.vertical, 16)
             .background(Color(UIColor.systemBackground))
             .cornerRadius(16)
             .padding(.horizontal, 16)
+            .onTapGesture {
+                showCourierModal = true
+            }
         }
     }
 
@@ -319,56 +312,42 @@ struct CheckoutView: View {
         VStack(alignment: .leading, spacing: 12) {
             sectionHeader(number: "3", title: "Payment Method")
 
-            VStack(spacing: 0) {
-                ForEach(Array(payments.enumerated()), id: \.element.id) { index, method in
-                    HStack(spacing: 14) {
-                        ZStack {
-                            Circle()
-                                .fill(Color(UIColor.secondarySystemBackground))
-                                .frame(width: 48, height: 48)
-                            Image(systemName: method.icon)
-                                .font(.system(size: 22))
-                                .foregroundColor(method.color)
-                        }
-                        .padding(.leading, 16)
-
-                        Text(method.name)
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-
-                        Spacer()
-
-                        ZStack {
-                            Circle()
-                                .strokeBorder(
-                                    viewModel.selectedPayment == method.name ? Color.brandGreen : Color.gray.opacity(0.35),
-                                    lineWidth: 1.5
-                                )
-                                .frame(width: 22, height: 22)
-                            if viewModel.selectedPayment == method.name {
-                                Circle()
-                                    .fill(Color.brandGreen)
-                                    .frame(width: 12, height: 12)
-                            }
-                        }
-                        .padding(.trailing, 16)
-                    }
-                    .padding(.vertical, 18)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        withAnimation(.easeInOut(duration: 0.15)) {
-                            viewModel.selectedPayment = method.name
-                        }
-                    }
-
-                    if index < payments.count - 1 {
-                        Divider().padding(.leading, 78)
+            HStack(spacing: 12) {
+                Image(systemName: viewModel.selectedPayment.isEmpty ? "creditcard" : (payments.first(where: { $0.name == viewModel.selectedPayment })?.icon ?? "creditcard"))
+                    .font(.system(size: 20))
+                    .foregroundColor(viewModel.selectedPayment.isEmpty ? .gray : (payments.first(where: { $0.name == viewModel.selectedPayment })?.color ?? .gray))
+                    .frame(width: 48, height: 48)
+                    .background(Color(UIColor.secondarySystemBackground))
+                    .clipShape(Circle())
+                    .padding(.leading, 16)
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(viewModel.selectedPayment.isEmpty ? "Select Payment" : viewModel.selectedPayment)
+                        .font(.subheadline)
+                        .fontWeight(viewModel.selectedPayment.isEmpty ? .regular : .semibold)
+                        .foregroundColor(viewModel.selectedPayment.isEmpty ? .secondary : .primary)
+                    
+                    if viewModel.selectedPayment.isEmpty {
+                        Text("Tap to choose payment method")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
                 }
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 14))
+                    .foregroundColor(.secondary)
+                    .padding(.trailing, 16)
             }
+            .padding(.vertical, 16)
             .background(Color(UIColor.systemBackground))
             .cornerRadius(16)
             .padding(.horizontal, 16)
+            .onTapGesture {
+                showPaymentModal = true
+            }
         }
     }
 
@@ -504,6 +483,196 @@ struct CheckoutView: View {
                 .padding(.trailing, 16)
         }
         .padding(.vertical, 8)
+    }
+}
+
+// MARK: - Courier Selection Modal
+
+struct CourierSelectionModal: View {
+    let couriers: [Courier]
+    @Binding var selectedCourier: String
+    let onDismiss: () -> Void
+    
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 0) {
+                ForEach(Array(couriers.enumerated()), id: \.element.id) { index, courier in
+                    VStack(alignment: .leading, spacing: 0) {
+                        HStack(spacing: 14) {
+                            ZStack {
+                                Circle()
+                                    .fill(Color(UIColor.secondarySystemBackground))
+                                    .frame(width: 48, height: 48)
+                                Image(systemName: courier.icon)
+                                    .font(.system(size: 20))
+                                    .foregroundColor(.brandGreen)
+                            }
+                            .padding(.leading, 16)
+
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(courier.name)
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                Text(courier.eta)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+
+                            Spacer()
+
+                            Text("₱\(Int(courier.fee))")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.trailing, 8)
+
+                            ZStack {
+                                Circle()
+                                    .strokeBorder(
+                                        selectedCourier == courier.name ? Color.brandGreen : Color.gray.opacity(0.35),
+                                        lineWidth: 1.5
+                                    )
+                                    .frame(width: 22, height: 22)
+                                if selectedCourier == courier.name {
+                                    Circle()
+                                        .fill(Color.brandGreen)
+                                        .frame(width: 12, height: 12)
+                                }
+                            }
+                            .padding(.trailing, 16)
+                        }
+                        .padding(.vertical, 16)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            withAnimation(.easeInOut(duration: 0.15)) {
+                                selectedCourier = courier.name
+                            }
+                        }
+
+                        Text("Estimated date of receipt depends on store packaging time and delivery time. The goods are sent according to the courier's schedule.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.horizontal, 16)
+                            .padding(.bottom, 14)
+                    }
+
+                    if index < couriers.count - 1 {
+                        Divider().padding(.leading, 16)
+                    }
+                }
+                
+                Spacer()
+                
+                Button {
+                    onDismiss()
+                } label: {
+                    Text("Confirm")
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 16)
+                        .background(selectedCourier.isEmpty ? Color.gray.opacity(0.4) : Color.brandGreen)
+                        .cornerRadius(14)
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 20)
+                }
+                .disabled(selectedCourier.isEmpty)
+            }
+            .background(Color(UIColor.systemGroupedBackground))
+            .navigationTitle("Select Courier")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Cancel") { onDismiss() }
+                        .foregroundColor(.brandGreen)
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Payment Selection Modal
+
+struct PaymentSelectionModal: View {
+    let payments: [PaymentMethod]
+    @Binding var selectedPayment: String
+    let onDismiss: () -> Void
+    
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 0) {
+                ForEach(Array(payments.enumerated()), id: \.element.id) { index, method in
+                    HStack(spacing: 14) {
+                        ZStack {
+                            Circle()
+                                .fill(Color(UIColor.secondarySystemBackground))
+                                .frame(width: 48, height: 48)
+                            Image(systemName: method.icon)
+                                .font(.system(size: 22))
+                                .foregroundColor(method.color)
+                        }
+                        .padding(.leading, 16)
+
+                        Text(method.name)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+
+                        Spacer()
+
+                        ZStack {
+                            Circle()
+                                .strokeBorder(
+                                    selectedPayment == method.name ? Color.brandGreen : Color.gray.opacity(0.35),
+                                    lineWidth: 1.5
+                                )
+                                .frame(width: 22, height: 22)
+                            if selectedPayment == method.name {
+                                Circle()
+                                    .fill(Color.brandGreen)
+                                    .frame(width: 12, height: 12)
+                            }
+                        }
+                        .padding(.trailing, 16)
+                    }
+                    .padding(.vertical, 18)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        withAnimation(.easeInOut(duration: 0.15)) {
+                            selectedPayment = method.name
+                        }
+                    }
+
+                    if index < payments.count - 1 {
+                        Divider().padding(.leading, 78)
+                    }
+                }
+                
+                Spacer()
+                
+                Button {
+                    onDismiss()
+                } label: {
+                    Text("Confirm")
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 16)
+                        .background(selectedPayment.isEmpty ? Color.gray.opacity(0.4) : Color.brandGreen)
+                        .cornerRadius(14)
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 20)
+                }
+                .disabled(selectedPayment.isEmpty)
+            }
+            .background(Color(UIColor.systemGroupedBackground))
+            .navigationTitle("Payment Method")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Cancel") { onDismiss() }
+                        .foregroundColor(.brandGreen)
+                }
+            }
+        }
     }
 }
 

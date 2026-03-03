@@ -16,7 +16,7 @@ struct Review: Codable {
     let reviewerEmail: String
 }
 
-struct Product: Codable {
+struct Product: Codable, Identifiable {
     let id: Int
     let images: [String]?
     let title: String

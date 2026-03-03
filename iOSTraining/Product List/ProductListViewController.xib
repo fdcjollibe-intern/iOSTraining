@@ -40,7 +40,7 @@
                 </searchBar>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color key="backgroundColor" red="0.15314009619999999" green="0.70585937499999996" blue="0.52568899690000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="O83-tD-qaE" secondAttribute="bottom" id="69g-8T-KIh"/>
                 <constraint firstItem="O83-tD-qaE" firstAttribute="top" secondItem="6WW-kU-EOc" secondAttribute="bottom" id="7tz-fZ-h1N"/>
