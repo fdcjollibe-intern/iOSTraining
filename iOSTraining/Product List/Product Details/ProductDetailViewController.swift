@@ -72,7 +72,7 @@ class ProductDetailViewController: UIViewController {
            formatter.minimumFractionDigits = 2
            formatter.maximumFractionDigits = 2
            formatter.groupingSeparator = ","
-           productPriceLabel.text = "₱ \(formatter.string(from: NSNumber(value: product.price)) ?? "0.00")"
+           productPriceLabel.text = "$ \(formatter.string(from: NSNumber(value: product.price)) ?? "0.00")"
 
            // Discount badge
            if let discount = product.discountPercentage, discount >= 10.0 {

@@ -31,6 +31,10 @@ class CheckoutViewModel: ObservableObject {
     var subtotal: Double {
         checkoutItems.reduce(0) { $0 + $1.total }
     }
+    
+    var totalSavings: Double {
+        checkoutItems.reduce(0) { $0 + $1.savings }
+    }
 
     var shippingFee: Double {
         switch selectedCourier {

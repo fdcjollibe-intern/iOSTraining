@@ -81,12 +81,12 @@ struct CartItemModal: View {
                                 .lineLimit(2)
                                 .foregroundColor(.primary)
                             
-                            Text("₱ \(item.price, specifier: "%.2f") each")
+                            Text("$ \(item.price, specifier: "%.2f") each")
                                 .font(.footnote)
                                 .foregroundColor(.secondary)
                             
                             if let live = liveItem {
-                                Text("Subtotal: ₱ \(live.total, specifier: "%.2f")")
+                                Text("Subtotal: $ \(live.total, specifier: "%.2f")")
                                     .font(.footnote)
                                     .fontWeight(.bold)
                                     .foregroundColor(.brandGreen)

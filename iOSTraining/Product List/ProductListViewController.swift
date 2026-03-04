@@ -24,8 +24,9 @@ class ProductListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.title = "Products"
+        
 
         let sortBarButtonItem = UIBarButtonItem(
             title: "Filter",
@@ -40,6 +41,8 @@ class ProductListViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
+        view.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.97, alpha: 1.0)
+        tableView.backgroundColor = .clear
 
         productSearchBar.delegate = self
         productSearchBar.placeholder = "Search products..."
@@ -50,7 +53,7 @@ class ProductListViewController: UIViewController {
         NetworkManager.shared.delegate = self
         NetworkManager.shared.fetchProducts()
     }
-
+    
     //Search
 
     private func performSearch(with searchText: String) {
@@ -149,6 +152,8 @@ class ProductListViewController: UIViewController {
         tableView.reloadData()
     }
     
+    
+
     
     
     private func addToWishlist(product: Product) {

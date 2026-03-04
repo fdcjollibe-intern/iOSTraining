@@ -19,7 +19,7 @@ class HomeViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         
-        guard let url = URL(string: "https://dummyjson.com/products?limit=30") else {
+        guard let url = URL(string: "https://dummyjson.com/products?limit=200") else {
             errorMessage = "Invalid URL"
             isLoading = false
             return

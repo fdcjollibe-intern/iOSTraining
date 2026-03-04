@@ -65,12 +65,39 @@ struct CartRowView: View {
                     .foregroundColor(.primary)
                     .lineLimit(1)
                 
+                // Sale badge if discounted
+                if let discountPct = item.discountPercentage {
+                    HStack(spacing: 4) {
+                        Image(systemName: "tag.fill")
+                            .font(.system(size: 8))
+                            .foregroundColor(Color(red: 0.88, green: 0.18, blue: 0.18))
+                        Text("\(Int(discountPct))% OFF SALE")
+                            .font(.system(size: 9, weight: .black))
+                            .foregroundColor(Color(red: 0.88, green: 0.18, blue: 0.18))
+                            .tracking(0.8)
+                    }
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 3)
+                    .background(
+                        Capsule()
+                            .fill(Color(red: 0.88, green: 0.18, blue: 0.18).opacity(0.12))
+                    )
+                }
+                
                 // Price and Quantity stepper on same line
                 HStack(spacing: 8) {
-                    Text("₱\(item.total, specifier: "%.2f")")
-                        .font(.headline)
-                        .fontWeight(.bold)
-                        .foregroundColor(.primary)
+                    VStack(alignment: .leading, spacing: 2) {
+                        if let originalPrice = item.displayOriginalPrice {
+                            Text("₱\(String(format: "%.2f", originalPrice * Double(item.quantity)))")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                                .strikethrough(true, color: .secondary)
+                        }
+                        Text("₱\(item.total, specifier: "%.2f")")
+                            .font(.headline)
+                            .fontWeight(.bold)
+                            .foregroundColor(item.discountPercentage != nil ? Color.brandGreen : .primary)
+                    }
                     
                     Spacer()
                     

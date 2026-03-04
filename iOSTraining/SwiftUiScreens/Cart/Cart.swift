@@ -10,6 +10,7 @@ import SwiftUI
 
 struct Cart: View {
     @StateObject private var viewModel = CartViewModel()
+    @StateObject private var saleManager = SaleManager.shared
     @State private var selectedIDs: Set<Int> = []
     @State private var selectedItem: CartItem? = nil
     @State private var navigateToCheckout = false
@@ -37,96 +38,106 @@ struct Cart: View {
 
     var body: some View {
         NavigationStack {
-            Group {
-                if viewModel.isEmpty {
-                    emptyState
-                } else {
-                    cartList
+            ZStack {
+                Group {
+                    if viewModel.isEmpty {
+                        emptyState
+                    } else {
+                        cartList
+                    }
                 }
-            }
-            .navigationTitle("My Cart")
-            .navigationBarTitleDisplayMode(.inline)
-            .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ShowCheckoutScreen"))) { _ in
-                // Select all items and navigate to checkout
-                if !viewModel.items.isEmpty {
-                    selectedIDs = Set(viewModel.items.map { $0.id })
-                    navigateToCheckout = true
+                .navigationTitle("My Cart")
+                .navigationBarTitleDisplayMode(.inline)
+                .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ShowCheckoutScreen"))) { _ in
+                    // Select all items and navigate to checkout
+                    if !viewModel.items.isEmpty {
+                        selectedIDs = Set(viewModel.items.map { $0.id })
+                        navigateToCheckout = true
+                    }
                 }
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    if !selectedIDs.isEmpty {
-                        Button(action: toggleSelectAll) {
-                            ZStack {
-                                Circle()
-                                    .strokeBorder(allSelected ? Color.brandGreen : Color.gray.opacity(0.35), lineWidth: 1.5)
-                                    .frame(width: 24, height: 24)
-                                if allSelected {
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        if !selectedIDs.isEmpty {
+                            Button(action: toggleSelectAll) {
+                                ZStack {
                                     Circle()
-                                        .fill(Color.brandGreen)
+                                        .strokeBorder(allSelected ? Color.brandGreen : Color.gray.opacity(0.35), lineWidth: 1.5)
                                         .frame(width: 24, height: 24)
-                                    Image(systemName: "checkmark")
-                                        .font(.system(size: 11, weight: .bold))
-                                        .foregroundColor(.white)
+                                    if allSelected {
+                                        Circle()
+                                            .fill(Color.brandGreen)
+                                            .frame(width: 24, height: 24)
+                                        Image(systemName: "checkmark")
+                                            .font(.system(size: 11, weight: .bold))
+                                            .foregroundColor(.white)
+                                    }
                                 }
                             }
+                            .buttonStyle(.plain)
+                            .transition(.opacity)
                         }
-                        .buttonStyle(.plain)
-                        .transition(.opacity)
+                    }
+                    
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            showWishlist = true
+                        } label: {
+                            Image(systemName: "heart")
+                                .foregroundColor(.red)
+                        }
+                    }
+                }
+                .alert("Order Placed! 🎉", isPresented: $viewModel.showCheckoutAlert) {
+                    Button("OK", role: .cancel) {}
+                } message: {
+                    Text("Thank you for your purchase!")
+                }
+                .sheet(item: $selectedItem) { item in
+                    CartItemModal(
+                        item: item,
+                        onIncrement: { viewModel.increment(item) },
+                        onDecrement: { viewModel.decrement(item) },
+                        onDelete: {
+                            selectedIDs.remove(item.id)
+                            viewModel.remove(item)
+                            selectedItem = nil
+                        },
+                        onDismiss: { selectedItem = nil }
+                    )
+                    .presentationDetents([.large, .medium])
+                    .presentationDragIndicator(.visible)
+                }
+                .sheet(isPresented: $showWishlist) {
+                    WishlistView()
+                }
+                .navigationDestination(isPresented: $navigateToCheckout) {
+                    CheckoutView(items: viewModel.items.filter { selectedIDs.contains($0.id) })
+                }
+                .alert("Remove Item", isPresented: $showSwipeDeleteConfirmation) {
+                    Button("Remove", role: .destructive) {
+                        if let item = itemToDelete {
+                            selectedIDs.remove(item.id)
+                            viewModel.remove(item)
+                            itemToDelete = nil
+                        }
+                    }
+                    Button("Cancel", role: .cancel) {
+                        itemToDelete = nil
+                    }
+                } message: {
+                    if let item = itemToDelete {
+                        Text("Are you sure you want to remove \"\(item.title)\" from your cart?")
+                    } else {
+                        Text("Are you sure you want to remove this item from your cart?")
                     }
                 }
                 
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        showWishlist = true
-                    } label: {
-                        Image(systemName: "heart")
-                            .foregroundColor(.red)
-                    }
-                }
-            }
-            .alert("Order Placed! 🎉", isPresented: $viewModel.showCheckoutAlert) {
-                Button("OK", role: .cancel) {}
-            } message: {
-                Text("Thank you for your purchase!")
-            }
-            .sheet(item: $selectedItem) { item in
-                CartItemModal(
-                    item: item,
-                    onIncrement: { viewModel.increment(item) },
-                    onDecrement: { viewModel.decrement(item) },
-                    onDelete: {
-                        selectedIDs.remove(item.id)
-                        viewModel.remove(item)
-                        selectedItem = nil
-                    },
-                    onDismiss: { selectedItem = nil }
-                )
-                .presentationDetents([.large, .medium])
-                .presentationDragIndicator(.visible)
-            }
-            .sheet(isPresented: $showWishlist) {
-                WishlistView()
-            }
-            .navigationDestination(isPresented: $navigateToCheckout) {
-                CheckoutView(items: viewModel.items.filter { selectedIDs.contains($0.id) })
-            }
-            .alert("Remove Item", isPresented: $showSwipeDeleteConfirmation) {
-                Button("Remove", role: .destructive) {
-                    if let item = itemToDelete {
-                        selectedIDs.remove(item.id)
-                        viewModel.remove(item)
-                        itemToDelete = nil
-                    }
-                }
-                Button("Cancel", role: .cancel) {
-                    itemToDelete = nil
-                }
-            } message: {
-                if let item = itemToDelete {
-                    Text("Are you sure you want to remove \"\(item.title)\" from your cart?")
-                } else {
-                    Text("Are you sure you want to remove this item from your cart?")
+                if saleManager.showSaleEndedModal {
+                    SaleEndedModalView(onDismiss: {
+                        saleManager.dismissSaleEndedModal()
+                    })
+                    .transition(.opacity)
+                    .zIndex(999)
                 }
             }
         }
@@ -212,7 +223,7 @@ struct Cart: View {
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     } else {
-                        Text("₱ \(String(format: "%.2f", selectedTotal))")
+                        Text("$ \(String(format: "%.2f", selectedTotal))")
                             .font(.title2)
                             .fontWeight(.bold)
                             .transition(.opacity)

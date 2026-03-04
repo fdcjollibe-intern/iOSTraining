@@ -344,11 +344,11 @@ struct HomeView: View {
                     .padding(.top, 8)
                 
                 HStack(spacing: 4) {
-                    Text("₱\(String(format: "%.0f", product.price))")
+                    Text("$\(String(format: "%.0f", product.price))")
                         .font(.subheadline)
                         .fontWeight(.bold)
                         .foregroundColor(.brandGreen)
-                    Text("₱\(String(format: "%.0f", product.originalPrice))")
+                    Text("$\(String(format: "%.0f", product.originalPrice))")
                         .font(.caption2)
                         .strikethrough()
                         .foregroundColor(.secondary)
@@ -435,12 +435,12 @@ struct HomeView: View {
             
             // Price + cart
             VStack(alignment: .trailing, spacing: 6) {
-                Text("₱\(String(format: "%.0f", product.price))")
+                Text("$\(String(format: "%.0f", product.price))")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
                 
-                Text("₱\(String(format: "%.0f", product.originalPrice))")
+                Text("$\(String(format: "%.0f", product.originalPrice))")
                     .font(.caption2)
                     .strikethrough()
                     .foregroundColor(.secondary)

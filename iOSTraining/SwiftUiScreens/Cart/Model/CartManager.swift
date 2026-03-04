@@ -21,21 +21,56 @@ class CartManager: ObservableObject {
     
     // MARK: - Public Methods
     
-    func add(product: Product) {
+    func add(product: Product, discountInfo: DiscountInfo? = nil) {
         if let index = items.firstIndex(where: { $0.id == product.id }) {
             items[index].quantity += 1
         } else {
+            // Check if sale is active and apply discount
+            let isSaleActive = SaleManager.shared.isSaleActive
+            let discountPct = discountInfo?.discountPercentage
+            let originalPrice = product.price
+            let discountedPrice: Double
+            
+            if isSaleActive, let pct = discountPct {
+                // Calculate discounted price
+                discountedPrice = originalPrice * (1.0 - pct / 100.0)
+            } else {
+                discountedPrice = originalPrice
+            }
+            
             let item = CartItem(
                 id: product.id,
                 title: product.title,
-                price: product.price,
+                price: discountedPrice,
                 thumbnail: product.thumbnail,
                 category: product.category,
                 itemDescription: product.description,
-                quantity: 1
+                quantity: 1,
+                discountPercentage: isSaleActive ? discountPct : nil,
+                originalPrice: isSaleActive ? originalPrice : nil
             )
             items.append(item)
         }
+    }
+    
+    func clearDiscounts() {
+        // When sale ends, restore original prices and clear discount info
+        for index in items.indices {
+            if let originalPrice = items[index].originalPrice {
+                items[index] = CartItem(
+                    id: items[index].id,
+                    title: items[index].title,
+                    price: originalPrice,
+                    thumbnail: items[index].thumbnail,
+                    category: items[index].category,
+                    itemDescription: items[index].itemDescription,
+                    quantity: items[index].quantity,
+                    discountPercentage: nil,
+                    originalPrice: nil
+                )
+            }
+        }
+        save()
     }
     
     func remove(item: CartItem) {

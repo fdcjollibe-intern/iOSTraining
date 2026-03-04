@@ -245,6 +245,7 @@ struct SettingsView: View {
         UserDefaults.standard.removeObject(forKey: "userName")
         UserDefaults.standard.removeObject(forKey: "cart_items")
         UserDefaults.standard.removeObject(forKey: "checkout_draft")
+        UserDefaults.standard.removeObject(forKey: "isDiscountModalSeen")
         UserDefaults.standard.synchronize()
 
         DispatchQueue.main.async {

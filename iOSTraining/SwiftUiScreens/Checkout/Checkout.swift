@@ -373,17 +373,37 @@ struct CheckoutView: View {
                             Text(item.title)
                                 .font(.subheadline)
                                 .lineLimit(1)
-                            Text("Qty: \(item.quantity)")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
+                            HStack(spacing: 4) {
+                                Text("Qty: \(item.quantity)")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                if let discountPct = item.discountPercentage {
+                                    Text("•")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    Text("\(Int(discountPct))% OFF")
+                                        .font(.caption)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(Color(red: 0.88, green: 0.18, blue: 0.18))
+                                }
+                            }
                         }
 
                         Spacer()
 
-                        Text("₱\(String(format: "%.2f", item.total))")
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                            .padding(.trailing, 16)
+                        VStack(alignment: .trailing, spacing: 2) {
+                            if let originalPrice = item.displayOriginalPrice {
+                                Text("₱\(String(format: "%.2f", originalPrice * Double(item.quantity)))")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                                    .strikethrough(true, color: .secondary)
+                            }
+                            Text("₱\(String(format: "%.2f", item.total))")
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                                .foregroundColor(item.discountPercentage != nil ? Color.brandGreen : .primary)
+                        }
+                        .padding(.trailing, 16)
                     }
                     .padding(.vertical, 12)
                     Divider().padding(.leading, 76)
@@ -391,6 +411,13 @@ struct CheckoutView: View {
 
                 VStack(spacing: 0) {
                     summaryRow(label: "Subtotal", value: "₱\(String(format: "%.2f", viewModel.subtotal))")
+                    if viewModel.totalSavings > 0 {
+                        summaryRow(
+                            label: "Sale Savings 🔥",
+                            value: "-₱\(String(format: "%.2f", viewModel.totalSavings))",
+                            savings: true
+                        )
+                    }
                     summaryRow(
                         label: "Shipping (\(viewModel.selectedCourier.isEmpty ? "—" : viewModel.selectedCourier))",
                         value: viewModel.selectedCourier.isEmpty ? "—" : "₱\(Int(viewModel.shippingFee))"
@@ -461,18 +488,18 @@ struct CheckoutView: View {
             Text(value)
                 .font(.subheadline)
                 .foregroundColor(.primary)
-                .lineLimit(1)
-
-            Spacer()
-        }
-        .padding(.vertical, 14)
-    }
-
-    private func summaryRow(label: String, value: String, bold: Bool = false) -> some View {
+                .lineLimit(1), savings: Bool = false) -> some View {
         HStack {
             Text(label)
                 .font(bold ? .subheadline : .footnote)
                 .fontWeight(bold ? .bold : .regular)
+                .foregroundColor(savings ? Color(red: 0.88, green: 0.18, blue: 0.18) : (bold ? .primary : .secondary))
+                .padding(.leading, 16)
+            Spacer()
+            Text(value)
+                .font(bold ? .subheadline : .footnote)
+                .fontWeight(bold ? .bold : (savings ? .bold : .regular))
+                .foregroundColor(savings ? Color(red: 0.88, green: 0.18, blue: 0.18) : (bold ? .brandGreen : .primary)
                 .foregroundColor(bold ? .primary : .secondary)
                 .padding(.leading, 16)
             Spacer()
@@ -520,7 +547,7 @@ struct CourierSelectionModal: View {
 
                             Spacer()
 
-                            Text("₱\(Int(courier.fee))")
+                            Text("$\(Int(courier.fee))")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.trailing, 8)

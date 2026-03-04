@@ -33,6 +33,8 @@ class ProductListTableViewCell: UITableViewCell {
     @IBOutlet weak var chip_cat_wrap: UIView!
     
     
+    @IBOutlet weak var cardContainerView: UIView!
+    
     private var currentImageURL: String?
 
         var product: Product? {
@@ -43,10 +45,25 @@ class ProductListTableViewCell: UITableViewCell {
 
         override func awakeFromNib() {
             super.awakeFromNib()
-            self.accessoryType = .disclosureIndicator
             self.backgroundColor = .clear
             self.selectionStyle = .none
+            
+            
+            // ── Card styling ──────────────────────────────────────────
+               // Find the containerView (first subview of contentView)
+               if let containerView = self.contentView.subviews.first {
+                   containerView.backgroundColor = .white
+                   containerView.layer.cornerRadius = 16
+                   containerView.layer.masksToBounds = false   // must be false for shadow to show
 
+                   containerView.layer.shadowColor   = UIColor.black.cgColor
+                   containerView.layer.shadowOpacity = 0.10
+                   containerView.layer.shadowRadius  = 8
+                   containerView.layer.shadowOffset  = CGSize(width: 0, height: 3)
+               }
+               // ─────────────────────────────────────────────────────────
+            
+            
             productIsFeatured.layer.cornerRadius = 10
             productIsFeatured.clipsToBounds = true
 
@@ -82,7 +99,7 @@ class ProductListTableViewCell: UITableViewCell {
             formatter.minimumFractionDigits = 2
             formatter.maximumFractionDigits = 2
             formatter.groupingSeparator = ","
-            productPriceLabel.text = "₱ \(formatter.string(from: NSNumber(value: product.price)) ?? "0.00")"
+            productPriceLabel.text = "$ \(formatter.string(from: NSNumber(value: product.price)) ?? "0.00")"
 
             productDescription.text = product.description
             

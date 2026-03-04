@@ -16,7 +16,28 @@ struct CartItem: Codable, Identifiable {
     let itemDescription: String?
     var quantity: Int
     
+    // Discount info - only present if added during sale
+    var discountPercentage: Double?
+    var originalPrice: Double?
+    
+    var effectivePrice: Double {
+        // If has discount info, use discounted price
+        if let _ = discountPercentage, let _ = originalPrice {
+            return price
+        }
+        return price
+    }
+    
+    var displayOriginalPrice: Double? {
+        return originalPrice
+    }
+    
     var total: Double {
-        price * Double(quantity)
+        effectivePrice * Double(quantity)
+    }
+    
+    var savings: Double {
+        guard let original = originalPrice else { return 0 }
+        return (original - price) * Double(quantity)
     }
 }

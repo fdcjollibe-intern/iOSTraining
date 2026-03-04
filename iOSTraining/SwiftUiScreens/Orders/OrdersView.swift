@@ -141,7 +141,7 @@ struct OrderRowView: View {
                         .font(.subheadline)
                         .fontWeight(.medium)
                     Spacer()
-                    Text("₱ \(String(format: "%.2f", order.total))")
+                    Text("$ \(String(format: "%.2f", order.total))")
                         .font(.subheadline)
                         .fontWeight(.bold)
                         .foregroundColor(.brandGreen)
@@ -247,7 +247,7 @@ struct OrderDetailView: View {
                                 
                                 Spacer()
                                 
-                                Text("₱\(String(format: "%.2f", item.total))")
+                                Text("$\(String(format: "%.2f", item.total))")
                                     .font(.subheadline)
                                     .fontWeight(.medium)
                             }
@@ -258,10 +258,10 @@ struct OrderDetailView: View {
                         Divider()
                         
                         VStack(spacing: 8) {
-                            summaryRow(label: "Subtotal", value: "₱\(String(format: "%.2f", order.subtotal))")
-                            summaryRow(label: "Shipping Fee", value: "₱\(String(format: "%.2f", order.courierFee))")
+                            summaryRow(label: "Subtotal", value: "$\(String(format: "%.2f", order.subtotal))")
+                            summaryRow(label: "Shipping Fee", value: "$\(String(format: "%.2f", order.courierFee))")
                             Divider().padding(.horizontal, 16)
-                            summaryRow(label: "Total", value: "₱\(String(format: "%.2f", order.total))", bold: true)
+                            summaryRow(label: "Total", value: "$\(String(format: "%.2f", order.total))", bold: true)
                         }
                         .padding(.bottom, 16)
                     }

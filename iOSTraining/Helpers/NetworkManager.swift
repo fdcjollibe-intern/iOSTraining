@@ -22,7 +22,7 @@ class NetworkManager {
     private init() {}
 
     func fetchProducts() {
-        guard let url = URL(string: "https://dummyjson.com/products") else {
+        guard let url = URL(string: "https://dummyjson.com/products?limit=200") else {
             print("Invalid URL")
             return
         }

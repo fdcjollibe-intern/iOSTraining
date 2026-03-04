@@ -127,7 +127,7 @@ struct WishlistRowView: View {
                         .fontWeight(.medium)
                         .lineLimit(2)
                     
-                    Text("₱ \(String(format: "%.2f", product.price))")
+                    Text("$ \(String(format: "%.2f", product.price))")
                         .font(.headline)
                         .foregroundColor(.brandGreen)
                 }
