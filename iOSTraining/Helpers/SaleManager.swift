@@ -24,7 +24,7 @@ class SaleManager: ObservableObject {
             return savedDate
         } else {
             // First launch - set sale end time
-            let endDate = Date().addingTimeInterval(23 * 3600 + 11 * 60 + 47)
+            let endDate = Date().addingTimeInterval(15) //(23 * 3600 + 11 * 60 + 47)
             UserDefaults.standard.set(endDate, forKey: saleEndTimeKey)
             return endDate
         }
@@ -71,7 +71,7 @@ class SaleManager: ObservableObject {
     
     // For testing - reset sale timer
     func resetSaleTimer() {
-        let endDate = Date().addingTimeInterval(23 * 3600 + 11 * 60 + 47)
+        let endDate = Date().addingTimeInterval(15)//(23 * 3600 + 11 * 60 + 47)
         UserDefaults.standard.set(endDate, forKey: saleEndTimeKey)
         isSaleActive = true
         showSaleEndedModal = false

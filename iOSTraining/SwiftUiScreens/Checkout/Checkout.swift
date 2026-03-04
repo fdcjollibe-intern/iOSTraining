@@ -488,7 +488,14 @@ struct CheckoutView: View {
             Text(value)
                 .font(.subheadline)
                 .foregroundColor(.primary)
-                .lineLimit(1), savings: Bool = false) -> some View {
+                .lineLimit(1)
+
+            Spacer()
+        }
+        .padding(.vertical, 14)
+    }
+
+    private func summaryRow(label: String, value: String, bold: Bool = false, savings: Bool = false) -> some View {
         HStack {
             Text(label)
                 .font(bold ? .subheadline : .footnote)
@@ -499,14 +506,7 @@ struct CheckoutView: View {
             Text(value)
                 .font(bold ? .subheadline : .footnote)
                 .fontWeight(bold ? .bold : (savings ? .bold : .regular))
-                .foregroundColor(savings ? Color(red: 0.88, green: 0.18, blue: 0.18) : (bold ? .brandGreen : .primary)
-                .foregroundColor(bold ? .primary : .secondary)
-                .padding(.leading, 16)
-            Spacer()
-            Text(value)
-                .font(bold ? .subheadline : .footnote)
-                .fontWeight(bold ? .bold : .regular)
-                .foregroundColor(bold ? .brandGreen : .primary)
+                .foregroundColor(savings ? Color(red: 0.88, green: 0.18, blue: 0.18) : (bold ? .brandGreen : .primary))
                 .padding(.trailing, 16)
         }
         .padding(.vertical, 8)
