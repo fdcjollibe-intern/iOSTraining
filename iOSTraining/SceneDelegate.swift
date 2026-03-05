@@ -39,7 +39,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let shopVC = ProductListViewController()
         let shopNav = UINavigationController(rootViewController: shopVC)
         shopNav.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 1)
-
+       
         // Cart Tab
         let cartVC = UIHostingController(rootView: Cart())
         cartVC.view.backgroundColor = .systemBackground

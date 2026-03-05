@@ -8,24 +8,6 @@
 import SwiftUI
 import Combine
 
-// MARK: - Discount Helper
-
-struct DiscountInfo {
-    let discountPercentage: Double
-    let badgeLabel: String
-    let tag: String?
-}
-
-/// Deterministic fake discount derived from product id — stable across reloads
-func fakeDiscount(for product: Product) -> DiscountInfo {
-    let seed = abs(product.id)
-    let percents = [10, 15, 20, 25, 30, 35, 40, 50]
-    let tags: [String?] = ["Best Seller", "Hot 🔥", "Top Pick", nil, nil, "Limited", nil, "Popular"]
-    let pct = percents[seed % percents.count]
-    let tag = tags[seed % tags.count]
-    return DiscountInfo(discountPercentage: Double(pct), badgeLabel: "\(pct)% OFF", tag: tag)
-}
-
 // MARK: - Cart Fly Animation
 
 struct CartBubble: Identifiable {
@@ -188,7 +170,6 @@ struct HomeTabView: View {
         }
         .onAppear {
             if viewModel.products.isEmpty { viewModel.fetchProducts() }
-            discountModal.scheduleIfNeeded()
         }
         .onReceive(bannerTimer) { _ in
             withAnimation(.easeInOut(duration: 0.5)) {
@@ -323,36 +304,72 @@ struct HomeTabView: View {
 
     private var saleContent: some View {
         VStack(spacing: 0) {
-            saleBannerHeader
+            if saleManager.isSaleActive {
+                saleBannerHeader
 
-            VStack(alignment: .leading, spacing: 16) {
-                HStack {
-                    Text("Flash Deals")
-                        .font(.headline).fontWeight(.bold)
-                    Spacer()
-                    Button { showAllSale = true } label: {
-                        Text("See All").font(.subheadline).foregroundColor(.brandGreen)
+                VStack(alignment: .leading, spacing: 16) {
+                    HStack {
+                        Text("Flash Deals")
+                            .font(.headline).fontWeight(.bold)
+                        Spacer()
+                        Button { showAllSale = true } label: {
+                            Text("See All").font(.subheadline).foregroundColor(.brandGreen)
+                        }
                     }
-                }
-                .padding(.horizontal, 20)
-                .padding(.top, 20)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 20)
 
-                LazyVGrid(columns: [
-                    GridItem(.flexible(), spacing: 16),
-                    GridItem(.flexible(), spacing: 16)
-                ], spacing: 16) {
-                    ForEach(viewModel.products.prefix(20)) { product in
-                        ProductCardView(
-                            product: product,
-                            discount: fakeDiscount(for: product),
-                            showSaleBadge: true
-                        )
+                    LazyVGrid(columns: [
+                        GridItem(.flexible(), spacing: 16),
+                        GridItem(.flexible(), spacing: 16)
+                    ], spacing: 16) {
+                        ForEach(viewModel.products.prefix(20)) { product in
+                            ProductCardView(
+                                product: product,
+                                discount: fakeDiscount(for: product),
+                                showSaleBadge: true
+                            )
+                        }
                     }
+                    .padding(.horizontal, 16)
                 }
-                .padding(.horizontal, 16)
+                .padding(.bottom, 24)
+            } else {
+                saleInactiveView
             }
-            .padding(.bottom, 24)
         }
+    }
+    
+    private var saleInactiveView: some View {
+        VStack(spacing: 20) {
+            Spacer()
+            
+            Image(systemName: "clock.badge.checkmark")
+                .font(.system(size: 60))
+                .foregroundColor(.gray.opacity(0.5))
+            
+            Text("Flash Sale Coming Soon!")
+                .font(.title2)
+                .fontWeight(.bold)
+                .foregroundColor(.primary)
+            
+            Text("The next flash sale will start in")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+            
+            Text(saleManager.formattedTimeRemaining())
+                .font(.system(size: 36, weight: .bold))
+                .foregroundColor(.brandGreen)
+                .monospacedDigit()
+            
+            Text("Browse regular deals in the meantime")
+                .font(.footnote)
+                .foregroundColor(.secondary)
+                .padding(.top, 8)
+            
+            Spacer()
+        }
+        .padding()
     }
 
     private var saleBannerHeader: some View {
@@ -398,9 +415,24 @@ struct HomeTabView: View {
                         .foregroundColor(.white)
                         .lineSpacing(2)
 
-                    Text("On selected items")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(.white.opacity(0.65))
+                    HStack(spacing: 8) {
+                        Text("On selected items")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundColor(.white.opacity(0.65))
+                        
+                        Text("•")
+                            .foregroundColor(.white.opacity(0.4))
+                            .font(.system(size: 10))
+                        
+                        HStack(spacing: 3) {
+                            Image(systemName: "clock.fill")
+                                .font(.system(size: 9))
+                            Text(saleManager.formattedTimeRemaining())
+                                .font(.system(size: 11, weight: .bold))
+                                .monospacedDigit()
+                        }
+                        .foregroundColor(.white)
+                    }
                 }
                 .padding(.leading, 24)
 
@@ -581,11 +613,11 @@ struct ProductCardView: View {
 
                 // Price row
                 HStack(alignment: .firstTextBaseline, spacing: 5) {
-                    Text("₱\(String(format: "%.2f", discountedPrice))")
+                    Text("$\(String(format: "%.2f", discountedPrice))")
                         .font(.system(size: 14, weight: .black))
                         .foregroundColor(Color.brandGreen)
 
-                    Text("₱\(String(format: "%.0f", product.price))")
+                    Text("$\(String(format: "%.0f", product.price))")
                         .font(.system(size: 11))
                         .foregroundColor(Color.secondary.opacity(0.8))
                         .strikethrough(true, color: .secondary)

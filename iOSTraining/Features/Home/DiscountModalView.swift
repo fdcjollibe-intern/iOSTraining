@@ -12,32 +12,40 @@ import Combine
 
 class DiscountModalManager: ObservableObject {
     @Published var isVisible: Bool = false
+    
+    private var saleCancellable: AnyCancellable?
+    private var hasShownForCurrentCycle = false
 
-    private let userDefaultsKey = "isDiscountModalSeen"
-
-    var hasBeenSeen: Bool {
-        get { UserDefaults.standard.bool(forKey: userDefaultsKey) }
-        set { UserDefaults.standard.set(newValue, forKey: userDefaultsKey) }
-    }
-
-    /// Call this on HomeTabView .onAppear — shows after 3 seconds if not yet seen
-    func scheduleIfNeeded() {
-        guard !hasBeenSeen else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            withAnimation { self.isVisible = true }
-        }
+    init() {
+        // Listen for sale starting
+        saleCancellable = SaleManager.shared.$currentPhase
+            .sink { [weak self] phase in
+                guard let self = self else { return }
+                
+                // Show modal when sale becomes active
+                if phase == .active && !self.hasShownForCurrentCycle {
+                    self.hasShownForCurrentCycle = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        withAnimation { self.isVisible = true }
+                    }
+                }
+                
+                // Reset flag when sale ends so it shows again next cycle
+                if phase == .inactive {
+                    self.hasShownForCurrentCycle = false
+                }
+            }
     }
 
     func dismiss() {
         withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
             isVisible = false
         }
-        hasBeenSeen = true
     }
 
-    /// For debug / testing — resets the seen flag so the modal shows again
-    func resetSeen() {
-        hasBeenSeen = false
+    /// For debug / testing — shows modal immediately
+    func showNow() {
+        withAnimation { isVisible = true }
     }
 }
 
@@ -47,23 +55,26 @@ class CountdownViewModel: ObservableObject {
     @Published var hours: Int = 0
     @Published var minutes: Int = 0
     @Published var seconds: Int = 0
+    @Published var phaseDescription: String = ""
 
     private var cancellable: AnyCancellable?
+    private let saleManager = SaleManager.shared
 
-    init(targetDate: Date) {
-        update(targetDate: targetDate)
+    init() {
+        updateFromSaleManager()
         cancellable = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
-                self?.update(targetDate: targetDate)
+                self?.updateFromSaleManager()
             }
     }
 
-    private func update(targetDate: Date) {
-        let remaining = max(0, targetDate.timeIntervalSince(Date()))
+    private func updateFromSaleManager() {
+        let remaining = saleManager.timeRemaining
         hours   = Int(remaining) / 3600
         minutes = (Int(remaining) % 3600) / 60
         seconds = Int(remaining) % 60
+        phaseDescription = saleManager.phaseDescription()
     }
 }
 
@@ -71,10 +82,7 @@ class CountdownViewModel: ObservableObject {
 
 struct DiscountModalView: View {
     @ObservedObject var manager: DiscountModalManager
-
-    @StateObject private var countdown = CountdownViewModel(
-        targetDate: Date().addingTimeInterval(15) //(23 * 3600 + 11 * 60 + 47)
-    )
+    @StateObject private var countdown = CountdownViewModel()
 
     @State private var scale: CGFloat = 0.01
     @State private var opacity: Double = 0
@@ -192,12 +200,12 @@ struct DiscountModalView: View {
                 .scaleEffect(pulseTag ? 1.04 : 1.0)
 
                 // Headline
-                Text("Up to 50% OFF")
+                Text(countdown.seconds > 40 ? "IT'S BACK!" : "Up to 50% OFF")
                     .font(.system(size: 38, weight: .black, design: .rounded))
                     .foregroundColor(.white)
                     .shadow(color: .black.opacity(0.25), radius: 4, x: 0, y: 2)
 
-                Text("on selected items today only")
+                Text(countdown.seconds > 40 ? "Flash sale is now active!" : "on selected items today only")
                     .font(.system(size: 13, weight: .medium))
                     .foregroundColor(.white.opacity(0.65))
 

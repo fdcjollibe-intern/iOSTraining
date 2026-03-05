@@ -58,6 +58,7 @@ struct AllProductsView: View {
     let isSaleMode: Bool
 
     @StateObject private var viewModel = AllProductsViewModel()
+    @StateObject private var saleManager = SaleManager.shared
     @State private var searchText: String = ""
     @State private var selectedProduct: Product? = nil
     @Environment(\.dismiss) private var dismiss
@@ -110,7 +111,7 @@ struct AllProductsView: View {
 
     private var productGrid: some View {
         ScrollView(showsIndicators: false) {
-            if isSaleMode {
+            if isSaleMode && saleManager.isSaleActive {
                 saleHeaderStrip
             }
 
@@ -135,7 +136,7 @@ struct AllProductsView: View {
                     AllProductCard(
                         product: product,
                         discount: fakeDiscount(for: product),
-                        showSaleBorder: isSaleMode
+                        showSaleBorder: isSaleMode && saleManager.isSaleActive
                     )
                     .onTapGesture {
                         selectedProduct = product
@@ -188,9 +189,23 @@ struct AllProductsView: View {
                         .font(.system(size: 22, weight: .black, design: .rounded))
                         .foregroundColor(.white)
 
-                    Text("\(viewModel.products.count) items on sale")
-                        .font(.system(size: 11, weight: .medium))
-                        .foregroundColor(.white.opacity(0.65))
+                    HStack(spacing: 8) {
+                        Text("\(viewModel.products.count) items")
+                            .font(.system(size: 11, weight: .medium))
+                            .foregroundColor(.white.opacity(0.65))
+                        
+                        Text("•")
+                            .foregroundColor(.white.opacity(0.4))
+                        
+                        HStack(spacing: 3) {
+                            Image(systemName: "clock.fill")
+                                .font(.system(size: 9))
+                            Text(saleManager.formattedTimeRemaining())
+                                .font(.system(size: 11, weight: .bold))
+                                .monospacedDigit()
+                        }
+                        .foregroundColor(.white)
+                    }
                 }
                 .padding(.leading, 20)
                 Spacer()
@@ -325,10 +340,10 @@ struct AllProductCard: View {
                     .foregroundColor(.secondary)
 
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
-                    Text("₱\(String(format: "%.2f", discountedPrice))")
+                    Text("$\(String(format: "%.2f", discountedPrice))")
                         .font(.system(size: 13, weight: .black))
                         .foregroundColor(Color.brandGreen)
-                    Text("₱\(String(format: "%.0f", product.price))")
+                    Text("$\(String(format: "%.0f", product.price))")
                         .font(.system(size: 10))
                         .foregroundColor(.secondary)
                         .strikethrough(true, color: .secondary)

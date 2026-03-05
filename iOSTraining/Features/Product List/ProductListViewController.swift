@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class ProductListViewController: UIViewController {
     
@@ -17,6 +18,7 @@ class ProductListViewController: UIViewController {
     
     private let cellIdentifier = "ProductListTableViewCell"
     private var searchWorkItem: DispatchWorkItem?
+    private var saleCancellable: AnyCancellable?
 
     var products: [Product] = []
     var filteredProducts: [Product] = []
@@ -52,6 +54,14 @@ class ProductListViewController: UIViewController {
         // Set self as the NetworkManager delegate, then fetch
         NetworkManager.shared.delegate = self
         NetworkManager.shared.fetchProducts()
+        
+        // Observe sale status changes to reload table
+        saleCancellable = SaleManager.shared.$isSaleActive
+            .sink { [weak self] _ in
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                }
+            }
     }
     
     //Search
@@ -168,7 +178,23 @@ class ProductListViewController: UIViewController {
     
     
     private func addToCart(product: Product) {
-        CartManager.shared.add(product: product)
+        // Check if sale is active
+        let isSaleActive = SaleManager.shared.isSaleActive
+        
+        let discountInfo: DiscountInfo?
+        if isSaleActive {
+            // FLASH SALE: Use fake discount
+            discountInfo = fakeDiscount(for: product)
+        } else {
+            // AFTER SALE: Use real API discount if >= 10%
+            if let realDiscount = product.discountPercentage, realDiscount >= 10.0 {
+                discountInfo = DiscountInfo(discountPercentage: realDiscount, badgeLabel: "\(String(format: "%.0f", realDiscount))% OFF", tag: nil)
+            } else {
+                discountInfo = nil
+            }
+        }
+        
+        CartManager.shared.add(product: product, discountInfo: discountInfo)
         
         let alert = UIAlertController(
             title: "🛒 Added to Cart",

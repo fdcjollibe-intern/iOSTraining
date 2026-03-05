@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class ProductDetailViewController: UIViewController {
     
@@ -24,7 +25,8 @@ class ProductDetailViewController: UIViewController {
     
     
     var product: Product?
-       private let imageCellIdentifier = "ProductImageCollectionViewCell"
+    private let imageCellIdentifier = "ProductImageCollectionViewCell"
+    private var saleCancellable: AnyCancellable?
 
        override func viewDidLoad() {
            super.viewDidLoad()
@@ -46,6 +48,14 @@ class ProductDetailViewController: UIViewController {
 
            view.layoutIfNeeded()
            displayProductDetails()
+           
+           // Observe sale status changes to update product display
+           saleCancellable = SaleManager.shared.$isSaleActive
+               .sink { [weak self] _ in
+                   DispatchQueue.main.async {
+                       self?.displayProductDetails()
+                   }
+               }
        }
 
        private func displayProductDetails() {
@@ -72,14 +82,92 @@ class ProductDetailViewController: UIViewController {
            formatter.minimumFractionDigits = 2
            formatter.maximumFractionDigits = 2
            formatter.groupingSeparator = ","
-           productPriceLabel.text = "$ \(formatter.string(from: NSNumber(value: product.price)) ?? "0.00")"
+           
+           // Check if sale is active
+           let isSaleActive = SaleManager.shared.isSaleActive
+           let discount = fakeDiscount(for: product)
+           
+           // Format price with sale discount if active
+           if isSaleActive {
+               // FLASH SALE: Apply fake discount
+               if discount.discountPercentage >= 10.0 {
+                   let discountedPrice = product.price * (1.0 - discount.discountPercentage / 100.0)
+                   
+                   let attributedPrice = NSMutableAttributedString()
+                   
+                   // Discounted price in green
+                   let discountedText = "$ \(formatter.string(from: NSNumber(value: discountedPrice)) ?? "0.00")"
+                   let greenAttributes: [NSAttributedString.Key: Any] = [
+                       .foregroundColor: UIColor(red: 0x21/255.0, green: 0xB4/255.0, blue: 0x85/255.0, alpha: 1.0),
+                       .font: UIFont.systemFont(ofSize: 24, weight: .bold)
+                   ]
+                   attributedPrice.append(NSAttributedString(string: discountedText, attributes: greenAttributes))
+                   
+                   // Original price with strikethrough
+                   let originalText = "  $ \(formatter.string(from: NSNumber(value: product.price)) ?? "0.00")"
+                   let grayAttributes: [NSAttributedString.Key: Any] = [
+                       .foregroundColor: UIColor.systemGray,
+                       .font: UIFont.systemFont(ofSize: 18),
+                       .strikethroughStyle: NSUnderlineStyle.single.rawValue
+                   ]
+                   attributedPrice.append(NSAttributedString(string: originalText, attributes: grayAttributes))
+                   
+                   productPriceLabel.attributedText = attributedPrice
+               } else {
+                   productPriceLabel.text = "$ \(formatter.string(from: NSNumber(value: product.price)) ?? "0.00")"
+               }
+           } else {
+               // AFTER SALE: Show real API discount if >= 10%
+               if let realDiscount = product.discountPercentage, realDiscount >= 10.0 {
+                   // Calculate original price backwards: originalPrice = price / (1 - discount/100)
+                   let calculatedOriginalPrice = product.price / (1.0 - realDiscount / 100.0)
+                   
+                   let attributedPrice = NSMutableAttributedString()
+                   
+                   // Current API price (already discounted)
+                   let discountedText = "$ \(formatter.string(from: NSNumber(value: product.price)) ?? "0.00")"
+                   let greenAttributes: [NSAttributedString.Key: Any] = [
+                       .foregroundColor: UIColor(red: 0x21/255.0, green: 0xB4/255.0, blue: 0x85/255.0, alpha: 1.0),
+                       .font: UIFont.systemFont(ofSize: 24, weight: .bold)
+                   ]
+                   attributedPrice.append(NSAttributedString(string: discountedText, attributes: greenAttributes))
+                   
+                   // Calculated original price with strikethrough
+                   let originalText = "  $ \(formatter.string(from: NSNumber(value: calculatedOriginalPrice)) ?? "0.00")"
+                   let grayAttributes: [NSAttributedString.Key: Any] = [
+                       .foregroundColor: UIColor.systemGray,
+                       .font: UIFont.systemFont(ofSize: 18),
+                       .strikethroughStyle: NSUnderlineStyle.single.rawValue
+                   ]
+                   attributedPrice.append(NSAttributedString(string: originalText, attributes: grayAttributes))
+                   
+                   productPriceLabel.attributedText = attributedPrice
+               } else {
+                   productPriceLabel.text = "$ \(formatter.string(from: NSNumber(value: product.price)) ?? "0.00")"
+               }
+           }
 
            // Discount badge
-           if let discount = product.discountPercentage, discount >= 10.0 {
-               isFeaturedLabel.text = "\(String(format: "%.0f", discount))% OFF"
-               isFeaturedLabel.isHidden = false
+           if isSaleActive {
+               // FLASH SALE: Show fake discount in RED
+               if discount.discountPercentage >= 10.0 {
+                   isFeaturedLabel.text = "\(String(format: "%.0f", discount.discountPercentage))% OFF"
+                   isFeaturedLabel.backgroundColor = UIColor(red: 0.88, green: 0.18, blue: 0.18, alpha: 1.0)  // Red for flash sale
+                   isFeaturedLabel.textColor = .white
+                   isFeaturedLabel.isHidden = false
+               } else {
+                   isFeaturedLabel.isHidden = true
+               }
            } else {
-               isFeaturedLabel.isHidden = true
+               // AFTER SALE: Show real API discount in GREEN
+               if let realDiscount = product.discountPercentage, realDiscount >= 10.0 {
+                   isFeaturedLabel.text = "\(String(format: "%.0f", realDiscount))% OFF"
+                   isFeaturedLabel.backgroundColor = UIColor(red: 0.10, green: 0.68, blue: 0.46, alpha: 1.0)  // Green for regular discount
+                   isFeaturedLabel.textColor = .white
+                   isFeaturedLabel.isHidden = false
+               } else {
+                   isFeaturedLabel.isHidden = true
+               }
            }
 
            // Rating and review count
@@ -133,8 +221,24 @@ class ProductDetailViewController: UIViewController {
     @IBAction func addToCartTapped(_ sender: UIButton) {
         guard let product = product else { return }
         
-        // Add to cart manager
-        CartManager.shared.add(product: product)
+        // Check if sale is active
+        let isSaleActive = SaleManager.shared.isSaleActive
+        
+        let discountInfo: DiscountInfo?
+        if isSaleActive {
+            // FLASH SALE: Use fake discount
+            discountInfo = fakeDiscount(for: product)
+        } else {
+            // AFTER SALE: Use real API discount if >= 10%
+            if let realDiscount = product.discountPercentage, realDiscount >= 10.0 {
+                discountInfo = DiscountInfo(discountPercentage: realDiscount, badgeLabel: "\(String(format: "%.0f", realDiscount))% OFF", tag: nil)
+            } else {
+                discountInfo = nil
+            }
+        }
+        
+        // Add to cart manager with discount info
+        CartManager.shared.add(product: product, discountInfo: discountInfo)
         
         // Show success feedback with animation
         let alert = UIAlertController(
@@ -149,8 +253,24 @@ class ProductDetailViewController: UIViewController {
     @IBAction func buyNowTapped(_ sender: UIButton) {
         guard let product = product else { return }
         
-        // Add to cart first
-        CartManager.shared.add(product: product)
+        // Check if sale is active
+        let isSaleActive = SaleManager.shared.isSaleActive
+        
+        let discountInfo: DiscountInfo?
+        if isSaleActive {
+            // FLASH SALE: Use fake discount
+            discountInfo = fakeDiscount(for: product)
+        } else {
+            // AFTER SALE: Use real API discount if >= 10%
+            if let realDiscount = product.discountPercentage, realDiscount >= 10.0 {
+                discountInfo = DiscountInfo(discountPercentage: realDiscount, badgeLabel: "\(String(format: "%.0f", realDiscount))% OFF", tag: nil)
+            } else {
+                discountInfo = nil
+            }
+        }
+        
+        // Add to cart first with discount info
+        CartManager.shared.add(product: product, discountInfo: discountInfo)
         
         // Navigate directly to checkout
         navigateToCheckout()

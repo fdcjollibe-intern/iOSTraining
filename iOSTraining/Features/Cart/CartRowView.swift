@@ -88,12 +88,12 @@ struct CartRowView: View {
                 HStack(spacing: 8) {
                     VStack(alignment: .leading, spacing: 2) {
                         if let originalPrice = item.displayOriginalPrice {
-                            Text("₱\(String(format: "%.2f", originalPrice * Double(item.quantity)))")
+                            Text("$\(String(format: "%.2f", originalPrice * Double(item.quantity)))")
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
                                 .strikethrough(true, color: .secondary)
                         }
-                        Text("₱\(item.total, specifier: "%.2f")")
+                        Text("$\(item.total, specifier: "%.2f")")
                             .font(.headline)
                             .fontWeight(.bold)
                             .foregroundColor(item.discountPercentage != nil ? Color.brandGreen : .primary)

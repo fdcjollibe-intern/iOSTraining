@@ -393,12 +393,12 @@ struct CheckoutView: View {
 
                         VStack(alignment: .trailing, spacing: 2) {
                             if let originalPrice = item.displayOriginalPrice {
-                                Text("₱\(String(format: "%.2f", originalPrice * Double(item.quantity)))")
+                                Text("$\(String(format: "%.2f", originalPrice * Double(item.quantity)))")
                                     .font(.caption2)
                                     .foregroundColor(.secondary)
                                     .strikethrough(true, color: .secondary)
                             }
-                            Text("₱\(String(format: "%.2f", item.total))")
+                            Text("$\(String(format: "%.2f", item.total))")
                                 .font(.subheadline)
                                 .fontWeight(.medium)
                                 .foregroundColor(item.discountPercentage != nil ? Color.brandGreen : .primary)
@@ -410,20 +410,20 @@ struct CheckoutView: View {
                 }
 
                 VStack(spacing: 0) {
-                    summaryRow(label: "Subtotal", value: "₱\(String(format: "%.2f", viewModel.subtotal))")
+                    summaryRow(label: "Subtotal", value: "$\(String(format: "%.2f", viewModel.subtotal))")
                     if viewModel.totalSavings > 0 {
                         summaryRow(
                             label: "Sale Savings 🔥",
-                            value: "-₱\(String(format: "%.2f", viewModel.totalSavings))",
+                            value: "-$\(String(format: "%.2f", viewModel.totalSavings))",
                             savings: true
                         )
                     }
                     summaryRow(
                         label: "Shipping (\(viewModel.selectedCourier.isEmpty ? "—" : viewModel.selectedCourier))",
-                        value: viewModel.selectedCourier.isEmpty ? "—" : "₱\(Int(viewModel.shippingFee))"
+                        value: viewModel.selectedCourier.isEmpty ? "—" : "$\(Int(viewModel.shippingFee))"
                     )
                     Divider().padding(.horizontal, 16).padding(.vertical, 4)
-                    summaryRow(label: "Total", value: "₱\(String(format: "%.2f", viewModel.total))", bold: true)
+                    summaryRow(label: "Total", value: "$\(String(format: "%.2f", viewModel.total))", bold: true)
                 }
                 .padding(.bottom, 8)
             }

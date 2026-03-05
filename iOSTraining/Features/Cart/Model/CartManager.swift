@@ -28,26 +28,34 @@ class CartManager: ObservableObject {
             // Check if sale is active and apply discount
             let isSaleActive = SaleManager.shared.isSaleActive
             let discountPct = discountInfo?.discountPercentage
-            let originalPrice = product.price
-            let discountedPrice: Double
+            let apiPrice = product.price
+            let finalPrice: Double
+            let originalPrice: Double?
             
             if isSaleActive, let pct = discountPct {
-                // Calculate discounted price
-                discountedPrice = originalPrice * (1.0 - pct / 100.0)
+                // FLASH SALE: Apply fake discount on top of API price
+                finalPrice = apiPrice * (1.0 - pct / 100.0)
+                originalPrice = apiPrice
+            } else if !isSaleActive, let pct = discountPct {
+                // AFTER SALE: API price is already discounted, calculate original backwards
+                finalPrice = apiPrice
+                originalPrice = apiPrice / (1.0 - pct / 100.0)
             } else {
-                discountedPrice = originalPrice
+                // No discount
+                finalPrice = apiPrice
+                originalPrice = nil
             }
             
             let item = CartItem(
                 id: product.id,
                 title: product.title,
-                price: discountedPrice,
+                price: finalPrice,
                 thumbnail: product.thumbnail,
                 category: product.category,
                 itemDescription: product.description,
                 quantity: 1,
-                discountPercentage: isSaleActive ? discountPct : nil,
-                originalPrice: isSaleActive ? originalPrice : nil
+                discountPercentage: discountPct,
+                originalPrice: originalPrice
             )
             items.append(item)
         }

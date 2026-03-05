@@ -12,13 +12,13 @@ struct SaleEndedModalView: View {
     
     @State private var scale: CGFloat = 0.01
     @State private var opacity: Double = 0
-
+    
     var body: some View {
         ZStack {
             Color.black.opacity(0.6)
                 .ignoresSafeArea()
                 .onTapGesture { onDismiss() }
-
+            
             modalCard
                 .scaleEffect(scale)
                 .opacity(opacity)
@@ -30,7 +30,7 @@ struct SaleEndedModalView: View {
                 }
         }
     }
-
+    
     private var modalCard: some View {
         ZStack(alignment: .topLeading) {
             fullCard
@@ -41,7 +41,7 @@ struct SaleEndedModalView: View {
         .shadow(color: Color.gray.opacity(0.35), radius: 40, x: 0, y: 16)
         .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 8)
     }
-
+    
     private var fullCard: some View {
         ZStack {
             // Dark gray base
@@ -53,20 +53,20 @@ struct SaleEndedModalView: View {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-
+            
             // Glowing orbs
             Circle()
                 .fill(Color.gray.opacity(0.15))
                 .frame(width: 200, height: 200)
                 .blur(radius: 50)
                 .offset(x: -60, y: -40)
-
+            
             Circle()
                 .fill(Color.orange.opacity(0.08))
                 .frame(width: 160, height: 160)
                 .blur(radius: 40)
                 .offset(x: 100, y: 120)
-
+            
             // Grid texture
             GeometryReader { geo in
                 Canvas { ctx, size in
@@ -87,11 +87,11 @@ struct SaleEndedModalView: View {
                 }
                 .frame(width: geo.size.width, height: geo.size.height)
             }
-
+            
             // Content
             VStack(spacing: 20) {
                 Spacer().frame(height: 12)
-
+                
                 // Icon
                 ZStack {
                     Circle()
@@ -101,30 +101,30 @@ struct SaleEndedModalView: View {
                         .font(.system(size: 40))
                         .foregroundColor(.white.opacity(0.8))
                 }
-
+                
                 // Headline
-                Text("Sale Ended")
+                Text("Flash Sale Ended")
                     .font(.system(size: 38, weight: .black, design: .rounded))
                     .foregroundColor(.white)
                     .shadow(color: .black.opacity(0.25), radius: 4, x: 0, y: 2)
-
-                Text("Thank you for shopping with us!")
+                
+                Text("The flash sale will return soon!")
                     .font(.system(size: 13, weight: .medium))
                     .foregroundColor(.white.opacity(0.65))
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 32)
-
+                
                 // Divider
                 Rectangle()
                     .fill(Color.white.opacity(0.12))
                     .frame(height: 1)
                     .padding(.horizontal, 32)
-
-                Text("All items have been updated\nto regular pricing")
+                
+                Text("All items have been updated\nto regular pricing with real discounts")
                     .font(.system(size: 12, weight: .medium))
                     .foregroundColor(.white.opacity(0.55))
                     .multilineTextAlignment(.center)
-
+                
                 Spacer().frame(height: 8)
             }
             .padding(.horizontal, 24)
@@ -132,7 +132,7 @@ struct SaleEndedModalView: View {
         .frame(maxWidth: .infinity)
         .frame(height: 400)
     }
-
+    
     private var closeButton: some View {
         Button { onDismiss() } label: {
             ZStack {

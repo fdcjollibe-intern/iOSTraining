@@ -7,6 +7,25 @@
 
 import Foundation
 
+// MARK: - Discount Helper
+
+struct DiscountInfo {
+    let discountPercentage: Double
+    let badgeLabel: String
+    let tag: String?
+}
+
+/// Deterministic fake discount derived from product id — stable across reloads
+func fakeDiscount(for product: Product) -> DiscountInfo {
+    let seed = abs(product.id)
+    let percents = [10, 15, 20, 25, 30, 35, 40, 50]
+    let tags: [String?] = ["Best Seller", "Hot 🔥", "Top Pick", nil, nil, "Limited", nil, "Popular"]
+    let pct = percents[seed % percents.count]
+    let tag = tags[seed % tags.count]
+    return DiscountInfo(discountPercentage: Double(pct), badgeLabel: "\(pct)% OFF", tag: tag)
+}
+
+// MARK: - Models
 
 struct Review: Codable {
     let rating: Int

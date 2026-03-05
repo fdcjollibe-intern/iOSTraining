@@ -30,8 +30,8 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qB0-ph-xBS">
                                 <rect key="frame" x="16" y="12" width="100" height="140"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="imgWidth"/>
                                     <constraint firstAttribute="height" constant="140" id="imgHeight"/>
+                                    <constraint firstAttribute="width" constant="100" id="imgWidth"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -50,16 +50,16 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="221" height="22"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="chip-feat-wrap">
-                                                        <rect key="frame" x="0.0" y="0.0" width="79" height="22"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="76" height="22"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="252" text="FEATURED" textAlignment="center" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="onb-5E-ayu">
-                                                                <rect key="frame" x="8" y="3" width="63" height="16"/>
+                                                                <rect key="frame" x="8" y="5" width="60" height="12"/>
                                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="10"/>
-                                                                <color key="textColor" red="0.34195005890000002" green="0.68807166809999998" blue="0.52968245739999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                         </subviews>
-                                                        <color key="backgroundColor" red="0.9376876354" green="0.98987954850000004" blue="0.96246081589999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                        <color key="backgroundColor" systemColor="systemRedColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="22" id="chipFeatHeight"/>
                                                             <constraint firstItem="onb-5E-ayu" firstAttribute="centerY" secondItem="chip-feat-wrap" secondAttribute="centerY" id="featCenterY"/>
@@ -74,10 +74,10 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="chip-cat-wrap">
-                                                        <rect key="frame" x="85" y="0.0" width="83" height="22"/>
+                                                        <rect key="frame" x="82" y="0.0" width="83" height="22"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="252" text="CATEGORY" textAlignment="center" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gtT-0s-Onv">
-                                                                <rect key="frame" x="8" y="3" width="67" height="16"/>
+                                                                <rect key="frame" x="8" y="5" width="67" height="12"/>
                                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="10"/>
                                                                 <color key="textColor" red="0.34195005890000002" green="0.68807166809999998" blue="0.52968245739999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                 <nil key="highlightedColor"/>
@@ -85,10 +85,10 @@
                                                         </subviews>
                                                         <color key="backgroundColor" red="0.9376876354" green="0.98987954850000004" blue="0.96246081589999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="22" id="chipCatHeight"/>
                                                             <constraint firstItem="gtT-0s-Onv" firstAttribute="centerY" secondItem="chip-cat-wrap" secondAttribute="centerY" id="catCenterY"/>
                                                             <constraint firstItem="gtT-0s-Onv" firstAttribute="leading" secondItem="chip-cat-wrap" secondAttribute="leading" constant="8" id="catLeading"/>
                                                             <constraint firstAttribute="trailing" secondItem="gtT-0s-Onv" secondAttribute="trailing" constant="8" id="catTrailing"/>
+                                                            <constraint firstAttribute="height" constant="22" id="chipCatHeight"/>
                                                         </constraints>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -98,42 +98,42 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </view>
                                                     <view contentMode="scaleToFill" horizontalHuggingPriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="chip-spacer">
-                                                        <rect key="frame" x="174" y="0.0" width="47" height="22"/>
+                                                        <rect key="frame" x="171" y="0.0" width="50" height="22"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                 </subviews>
                                             </stackView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v61-BF-QfY">
-                                                <rect key="frame" x="0.0" y="28" width="221" height="20.333333333333336"/>
+                                                <rect key="frame" x="0.0" y="28" width="221" height="19.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                                 <color key="textColor" white="0.10000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6X7-Hd-Yd3">
-                                                <rect key="frame" x="0.0" y="54.333333333333343" width="221" height="28.666666666666664"/>
+                                                <rect key="frame" x="0.0" y="53.333333333333329" width="221" height="15.666666666666671"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="$999.00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W3Y-a6-h28">
-                                                <rect key="frame" x="0.0" y="89" width="221" height="21.666666666666671"/>
+                                                <rect key="frame" x="0.0" y="75" width="221" height="21.666666666666671"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                                 <color key="textColor" red="0.3381031156" green="0.69558709860000001" blue="0.53383588790000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="gQf-og-yK9">
-                                                <rect key="frame" x="0.0" y="116.66666666666667" width="221" height="3.3333333333333286"/>
+                                                <rect key="frame" x="0.0" y="102.66666666666667" width="221" height="37.333333333333329"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="751" text="⭐ 4.5 (128 reviews)" textAlignment="natural" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8s3-p4-mUX">
-                                                        <rect key="frame" x="0.0" y="0.0" width="118.33333333333333" height="9.3333333333333286"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="109.33333333333333" height="37.333333333333336"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                         <color key="textColor" white="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" text="• In Stock" textAlignment="natural" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="taz-Y8-FoZ">
-                                                        <rect key="frame" x="126.33333333333334" y="0.0" width="108.66666666666666" height="9.3333333333333286"/>
+                                                        <rect key="frame" x="115.33333333333331" y="0.0" width="105.66666666666669" height="37.333333333333336"/>
                                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="11"/>
-                                                        <color key="textColor" red="0.20392156862745098" green="0.78039215686274508" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="textColor" red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -143,25 +143,25 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="tPs-eZ-ecI" firstAttribute="top" secondItem="pCV-rg-ht2" secondAttribute="top" id="contentTop"/>
-                                    <constraint firstItem="tPs-eZ-ecI" firstAttribute="leading" secondItem="pCV-rg-ht2" secondAttribute="leading" id="contentLeading"/>
-                                    <constraint firstAttribute="trailing" secondItem="tPs-eZ-ecI" secondAttribute="trailing" id="contentTrailing"/>
                                     <constraint firstAttribute="bottom" secondItem="tPs-eZ-ecI" secondAttribute="bottom" id="contentBottom"/>
+                                    <constraint firstItem="tPs-eZ-ecI" firstAttribute="leading" secondItem="pCV-rg-ht2" secondAttribute="leading" id="contentLeading"/>
+                                    <constraint firstItem="tPs-eZ-ecI" firstAttribute="top" secondItem="pCV-rg-ht2" secondAttribute="top" id="contentTop"/>
+                                    <constraint firstAttribute="trailing" secondItem="tPs-eZ-ecI" secondAttribute="trailing" id="contentTrailing"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="separatorLine" firstAttribute="leading" secondItem="containerView" secondAttribute="leading" id="sepLeading"/>
-                            <constraint firstItem="separatorLine" firstAttribute="top" secondItem="containerView" secondAttribute="top" id="sepTop"/>
-                            <constraint firstAttribute="bottom" secondItem="separatorLine" secondAttribute="bottom" id="sepBottom"/>
-                            <constraint firstItem="qB0-ph-xBS" firstAttribute="leading" secondItem="separatorLine" secondAttribute="trailing" constant="12" id="imgLeading"/>
-                            <constraint firstItem="qB0-ph-xBS" firstAttribute="top" secondItem="containerView" secondAttribute="top" constant="12" id="imgTop"/>
-                            <constraint firstItem="qB0-ph-xBS" firstAttribute="centerY" secondItem="containerView" secondAttribute="centerY" id="imgCenterY"/>
+                            <constraint firstAttribute="bottom" secondItem="pCV-rg-ht2" secondAttribute="bottom" constant="12" id="contentViewBottom"/>
                             <constraint firstItem="pCV-rg-ht2" firstAttribute="leading" secondItem="qB0-ph-xBS" secondAttribute="trailing" constant="12" id="contentViewLeading"/>
                             <constraint firstItem="pCV-rg-ht2" firstAttribute="top" secondItem="containerView" secondAttribute="top" constant="12" id="contentViewTop"/>
                             <constraint firstAttribute="trailing" secondItem="pCV-rg-ht2" secondAttribute="trailing" constant="12" id="contentViewTrailing"/>
-                            <constraint firstAttribute="bottom" secondItem="pCV-rg-ht2" secondAttribute="bottom" constant="12" id="contentViewBottom"/>
+                            <constraint firstItem="qB0-ph-xBS" firstAttribute="centerY" secondItem="containerView" secondAttribute="centerY" id="imgCenterY"/>
+                            <constraint firstItem="qB0-ph-xBS" firstAttribute="leading" secondItem="separatorLine" secondAttribute="trailing" constant="12" id="imgLeading"/>
+                            <constraint firstItem="qB0-ph-xBS" firstAttribute="top" secondItem="containerView" secondAttribute="top" constant="12" id="imgTop"/>
+                            <constraint firstAttribute="bottom" secondItem="separatorLine" secondAttribute="bottom" id="sepBottom"/>
+                            <constraint firstItem="separatorLine" firstAttribute="leading" secondItem="containerView" secondAttribute="leading" id="sepLeading"/>
+                            <constraint firstItem="separatorLine" firstAttribute="top" secondItem="containerView" secondAttribute="top" id="sepTop"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -185,14 +185,14 @@
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
-                    <constraint firstItem="containerView" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="containerLeading"/>
-                    <constraint firstAttribute="trailing" secondItem="containerView" secondAttribute="trailing" constant="16" id="containerTrailing"/>
-                    <constraint firstItem="containerView" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="containerTop"/>
                     <constraint firstAttribute="bottom" secondItem="containerView" secondAttribute="bottom" constant="8" id="containerBottom"/>
+                    <constraint firstItem="containerView" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="containerLeading"/>
+                    <constraint firstItem="containerView" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="containerTop"/>
+                    <constraint firstAttribute="trailing" secondItem="containerView" secondAttribute="trailing" constant="16" id="containerTrailing"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="chip_cat_wrap" destination="chip-cat-wrap" id="chip-cat-outlet"/>
                 <outlet property="chip_feat_wrap" destination="chip-feat-wrap" id="chip-feat-outlet"/>
@@ -206,12 +206,15 @@
                 <outlet property="productPriceLabel" destination="W3Y-a6-h28" id="4LK-5d-yIs"/>
                 <outlet property="productReviewsLabel" destination="8s3-p4-mUX" id="wrw-pw-JnE"/>
             </connections>
-            <point key="canvasLocation" x="106.87022900763359" y="169.01408450704227"/>
+            <point key="canvasLocation" x="106.8702290076336" y="169.01408450704227"/>
         </tableViewCell>
     </objects>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.2196078431372549" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
